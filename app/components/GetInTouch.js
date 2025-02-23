@@ -7,7 +7,7 @@ import { HiLocationMarker } from "react-icons/hi";
 
 export default function GetInTouch() {
     return (
-        <div className='w-full flex flex-wrap justify-around'>
+        <div className='w-full flex flex-wrap gap-y-3 justify-around'>
             {/* contact */}
             <div className='flex items-center gap-x-3'>
                 <FaPhone className='text-secondary text-base md:text-2xl ' />
