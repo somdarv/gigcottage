@@ -1,18 +1,29 @@
+'use client'
 import Image from 'next/image'
 import React from 'react'
 import GetInTouch from './components/GetInTouch'
-import { FaPhone } from "react-icons/fa6";
+import { FaPhone, FaWhatsapp } from 'react-icons/fa6'; // Import WhatsApp icon
 import SmallMenu from './components/SmallMenu';
 import Services from './components/Services';
 
 
 
 export default function page() {
+
+  const whatsappNumber = '+233257441441'; // Replace with your WhatsApp number
+  const whatsappMessage = 'Hello, I am interested in your event services.'; // Optional message
+
+  const handleWhatsAppClick = () => {
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    window.open(url, '_blank');
+  };
+
+
   return (
     <div className=' w-full '>
       <div className='w-full pt-8 flex items-center justify-center'>
         <Image
-          src={'/giglogo.png'}
+          src={'/giglogopalm.webp'}
           width={1081}
           height={630}
           className='w-[90%] md:w-[50%] mx-auto'
@@ -33,7 +44,6 @@ export default function page() {
         <GetInTouch />
       </div>
 
-      {/* small menu */}
       <div className='w-[80%] md:w-[25%] my-8 mx-auto'>
         <SmallMenu />
       </div>
@@ -43,7 +53,9 @@ export default function page() {
         <Services />
       </div>
 
-
+      <div className="fixed bottom-20 right-24 bg-green-500 hover:bg-green-600 text-white rounded-full p-3 shadow-lg cursor-pointer z-50" onClick={handleWhatsAppClick}>
+        <FaWhatsapp className="text-6xl" />
+      </div>
 
 
     </div>

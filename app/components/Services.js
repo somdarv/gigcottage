@@ -19,7 +19,7 @@ export default function Services() {
     return (
         <div className='w-full flex flex-wrap items-start'>
             {/* facilities */}
-            <div className='w-full p-6 md:p-12  bg-primary2 md:w-1/2'>
+            <div className='w-full p-6 md:p-12   bg-primary2 md:w-1/2'>
                 <div className='w-[80%] mx-auto'>
                     <p className='uppercase text-white font-bold text-lg'>Our Facilities</p>
                     <div className='w-full mt-3'>
@@ -28,17 +28,19 @@ export default function Services() {
                     </div>
 
 
-                    <div className='my-4'>
-                        {facilities.map((facility, index) => (
-                            <div key={index} className='w-full my-8'>
-                                <div className='flex items-center gap-x-3'>
-                                    <div className='bg-secondary w-4 h-4'></div>
-                                    <h1 className='font-bold text-2xl uppercase text-white'>{facility.title}</h1>
+                    <div className='w-full '>
+                        <div className='my-4 '>
+                            {facilities.map((facility, index) => (
+                                <div key={index} className='w-full my-8'>
+                                    <div className='flex items-center gap-x-3'>
+                                        <div className='bg-secondary w-4 h-4'></div>
+                                        <h1 className='font-bold text-2xl uppercase text-white'>{facility.title}</h1>
+                                    </div>
+                                    <p className='text-white text-xl my-2'>{facility.sub}</p>
                                 </div>
-                                <p className='text-white text-xl my-2'>{facility.sub}</p>
-                            </div>
-                        ))}
+                            ))}
 
+                        </div>
                     </div>
 
 
