@@ -3,27 +3,30 @@ import React from 'react'
 export default function Services() {
 
     const facilities = [
-        { title: 'grounds', sub: '800+ dinner setting sitting capacity' },
-        { title: "EDITH'S HALL", sub: '800 + Theatre setting sitting capacity' },
+        { title: 'Garden', sub: '1,000 dinner setting sitting capacity' },
+        { title: "Main Auditorium", sub: '800 + Theatre setting sitting capacity' },
         { title: "PALACE HALL", sub: '100+ Theatre setting sitting capacity' },
-        { title: "CAR PARK", sub: '100+ Secured car park' },
+        { title: "CAR PARK", sub: '150+ Secured car park' },
     ];
 
     const services = [
-        { name: 'food' },
-        { name: 'Event Setup' },
-        { name: 'Decor' },
-        { name: 'Fresh Natural Flowers' },
+        { name: 'Corporate Events' },
+        { name: 'Events Marketing' },
+        { name: 'Weddings' },
+        { name: 'Fresh Flowers' },
+        { name: 'Parties' },
+        { name: 'Retreats' },
+        { name: 'Receptions' },
     ]
 
     return (
-        <div className='w-full flex flex-wrap items-start'>
+        <div className='flex flex-wrap items-start w-full'>
             {/* facilities */}
-            <div className='w-full p-6 md:p-12   bg-primary2 md:w-1/2'>
+            <div className='w-full p-6 md:p-12 bg-primary2 md:w-1/2'>
                 <div className='w-[80%] mx-auto'>
-                    <p className='uppercase text-white font-bold text-lg'>Our Facilities</p>
+                    <p className='text-lg font-bold text-white uppercase'>Our Facilities</p>
                     <div className='w-full mt-3'>
-                        <p className='text-secondary text-4xl font-bold'>Event Spaces</p>
+                        <p className='text-4xl font-bold text-secondary'>Event Spaces</p>
                         <div className='bg-secondary w-[25%] mt-3 h-1'></div>
                     </div>
 
@@ -33,10 +36,10 @@ export default function Services() {
                             {facilities.map((facility, index) => (
                                 <div key={index} className='w-full my-8'>
                                     <div className='flex items-center gap-x-3'>
-                                        <div className='bg-secondary w-4 h-4'></div>
-                                        <h1 className='font-bold text-2xl uppercase text-white'>{facility.title}</h1>
+                                        <div className='w-4 h-4 bg-secondary'></div>
+                                        <h1 className='text-2xl font-bold text-white uppercase'>{facility.title}</h1>
                                     </div>
-                                    <p className='text-white text-xl my-2'>{facility.sub}</p>
+                                    <p className='my-2 text-xl text-white'>{facility.sub}</p>
                                 </div>
                             ))}
 
@@ -53,9 +56,9 @@ export default function Services() {
             {/* services */}
             <div className='w-full p-6 md:p-12 text-primary md:w-1/2'>
                 <div className='w-[80%] mx-auto'>
-                    <p className='uppercase text-gig-black font-bold text-lg'>Our Services</p>
+                    <p className='text-lg font-bold uppercase text-gig-black'>Our Services</p>
                     <div className='w-full mt-3'>
-                        <p className='text-primary text-4xl font-bold'>Services We Provide</p>
+                        <p className='text-4xl font-bold text-primary'>Services We Provide</p>
                         <div className='bg-secondary w-[25%] mt-3 h-1'></div>
                     </div>
 
@@ -64,10 +67,10 @@ export default function Services() {
                         {services.map((service, index) => (
                             <div key={index} className='w-full my-3'>
                                 <div className='flex items-center gap-x-3'>
-                                    <div className='bg-gig-black w-4 h-1'></div>
-                                    <h1 className='font-bold text-2xl uppercase text-gig-black'>{service.name}</h1>
+                                    <div className='w-4 h-1 bg-gig-black'></div>
+                                    <h1 className='text-2xl font-bold uppercase text-gig-black'>{service.name}</h1>
                                 </div>
-                                {/* <p className='text-white text-xl my-2'>{facility.sub}</p> */}
+                                {/* <p className='my-2 text-xl text-white'>{facility.sub}</p> */}
                             </div>
                         ))}
 

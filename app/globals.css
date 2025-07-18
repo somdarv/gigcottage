@@ -6,3 +6,43 @@
 body {
   font-family: var(--font-montserrat), sans-serif;
 }
+
+/* swiper.css */
+.swiper-button-prev,
+.swiper-button-next {
+  color: theme('colors.primary') !important;
+  /* Use Tailwind's primary color */
+  background-color: white !important;
+  /* White background for visibility */
+  padding: 0.8rem;
+  /* Small padding for the background */
+  border-radius: 100%;
+  /* Circular background */
+  width: 2rem !important;
+  /* Ensure consistent size */
+  height: 2rem !important;
+  opacity: 0.9;
+  /* Slight transparency for a subtle look */
+  --swiper-navigation-size: 1rem;
+  /* Adjust this value to change the arrow size */
+  font-weight: 900 !important;
+  /* Make it heavier (e.g., 700, 800, 900 for bolder look) */
+
+  opacity: 0.9;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  opacity: 1;
+  /* Full opacity on hover */
+}
+
+.swiper-pagination-bullet {
+  background-color: theme('colors.secondary') !important;
+  /* Match primary color */
+}
+
+.swiper-pagination-bullet-active {
+  background-color: theme('colors.white') !important;
+  /* Active dot */
+}
