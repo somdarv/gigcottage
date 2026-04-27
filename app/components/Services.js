@@ -3,7 +3,7 @@ import React from 'react'
 export default function Services() {
 
     const facilities = [
-        { title: 'Garden', sub: '1,000 dinner setting sitting capacity' },
+        { title: 'Garden', sub: '1000+ dinner setting sitting capacity' },
         { title: "Main Auditorium", sub: '800 + Theatre setting sitting capacity' },
         { title: "MINI HALL", sub: '100 Dinner setting sitting capacity' },
         { title: "Terrace", sub: '100 Dinner setting sitting capacity ' },
