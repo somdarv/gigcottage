@@ -5,18 +5,16 @@ export default function Services() {
     const facilities = [
         { title: 'Garden', sub: '1,000 dinner setting sitting capacity' },
         { title: "Main Auditorium", sub: '800 + Theatre setting sitting capacity' },
-        { title: "PALACE HALL", sub: '100+ Theatre setting sitting capacity' },
+        { title: "MINI HALL", sub: '100 Dinner setting sitting capacity' },
+        { title: "Terrace", sub: '100 Dinner setting sitting capacity ' },
         { title: "CAR PARK", sub: '150+ Secured car park' },
     ];
 
     const services = [
-        { name: 'Corporate Events' },
-        { name: 'Events Marketing' },
-        { name: 'Weddings' },
-        { name: 'Fresh Flowers' },
-        { name: 'Parties' },
-        { name: 'Retreats' },
-        { name: 'Receptions' },
+        { name: 'Event Planning And Coordination' },
+        { name: 'Setup and Decor' },
+        { name: 'Catering (in-house chef available)' },
+
     ]
 
     return (
@@ -68,7 +66,7 @@ export default function Services() {
                             <div key={index} className='w-full my-3'>
                                 <div className='flex items-center gap-x-3'>
                                     <div className='w-4 h-1 bg-gig-black'></div>
-                                    <h1 className='text-2xl font-bold uppercase text-gig-black'>{service.name}</h1>
+                                    <h1 className='w-full my-2 text-2xl font-bold uppercase text-gig-black'>{service.name}</h1>
                                 </div>
                                 {/* <p className='my-2 text-xl text-white'>{facility.sub}</p> */}
                             </div>
