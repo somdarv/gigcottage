@@ -1,0 +1,42 @@
+name: Deploy to cPanel (server pulls + builds)
+
+# On push to main, SSH into Namecheap cPanel and have the SERVER pull the
+# latest code from GitHub, build the Next.js app, and restart Passenger.
+# App root: ~/thecottage  (domain: gigcottage.net, Node 18 via cPanel venv).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-gigcottage
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH → git pull, build, restart
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.CPANEL_HOST }}
+          username: ${{ secrets.CPANEL_USERNAME }}
+          key: ${{ secrets.CPANEL_SSH_KEY }}
+          port: "21098"
+          command_timeout: 20m
+          script: |
+            set -e
+            export PATH="$HOME/nodevenv/thecottage/18/bin:$PATH"
+            unset NODE_ENV NODE_PATH
+            export RAYON_NUM_THREADS=2 UV_THREADPOOL_SIZE=2 \
+                   NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=1024
+            cd "$HOME/thecottage"
+            git fetch --depth=1 origin main
+            git reset --hard origin/main
+            git gc --prune=now --quiet || true
+            npm ci --include=dev --no-audit --no-fund
+            npm run build
+            npm prune --omit=dev
+            mkdir -p tmp && touch tmp/restart.txt
+            echo "Deployed $(git rev-parse --short HEAD)"
