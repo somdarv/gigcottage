@@ -1132,6 +1132,12 @@ html { scroll-behavior: smooth; }
   color: var(--gc-bone);
 }
 
+/* Phones are tall and narrow, so 62vh of a small viewport reads as a band
+   rather than a picture. */
+@media (max-width: 619px) {
+  .gc-page-hero { height: clamp(440px, 66vh, 620px); }
+}
+
 .gc-page-hero picture { display: contents; }
 
 .gc-page-hero img {
@@ -1232,6 +1238,18 @@ html { scroll-behavior: smooth; }
 }
 
 @media (min-width: 900px) { .gc-slide { aspect-ratio: 16 / 9; } }
+
+/* On a phone the caption is the tallest thing in the frame — the auditorium's
+   name alone takes two lines, then three of note and a button. In a 3:2 box
+   that leaves a strip of photograph along the top, and the slide stops being
+   a picture. A portrait frame gives the picture its share back; the cap keeps
+   it from taking the whole screen. */
+@media (max-width: 619px) {
+  .gc-slide {
+    aspect-ratio: 4 / 5;
+    max-height: 76vh;
+  }
+}
 
 .gc-slide picture { display: contents; }
 
