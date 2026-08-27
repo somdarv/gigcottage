@@ -2,47 +2,2983 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Brand tokens (v2)
+
+   Ground and type follow aman.com, which the client approved as the reference:
+   a warm bone ground, a high-contrast LIGHT serif, soft near-black text rather
+   than pure black, and one desaturated warm accent. The gold is the original
+   brand #dfb854 pulled down — at full saturation it fights the bone.
+   ========================================================================== */
+:root {
+  /* The ground sits close to white and takes its warmth from a trace of the
+     oxblood rather than from tan — the tan version read dull under the bone
+     serif. bone-2 is the hover/inset step, kept close enough that a tile
+     lighting up is a shift in the surface, not a second colour. */
+  --gc-bone: #fdfbf8;
+  --gc-bone-2: #f5f0e9;
+  --gc-oxblood: #44180f;
+  --gc-oxblood-deep: #2b0f09;
+  --gc-ink: #2a2320;
+  --gc-ink-soft: #6e675f;
+  --gc-gold: #c9a24a;
+  --gc-hairline: rgba(68, 24, 15, .16);
+  --gc-hairline-bone: rgba(253, 251, 248, .28);
+
+  --gc-display: var(--font-cormorant), ui-serif, Georgia, "Times New Roman", serif;
+  --gc-serif: var(--font-newsreader), ui-serif, Georgia, "Times New Roman", serif;
+  --gc-sans: var(--font-source-sans), ui-sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  --gc-pad: clamp(20px, 4.4vw, 64px);
+  /* Decelerating, no overshoot: things arrive and stop rather than bouncing. */
+  --gc-ease-soft: cubic-bezier(.22, 1, .36, 1);
+
+  /* Read by Hero to work out which strip of image sits behind the header. */
+  --gc-hdr-h: 72px;
+
+  /* Scroll progress through the hero, written by SiteHeader. */
+  --gc-p: 0;
+}
 
 body {
+  /* Montserrat stays the default while the sections below the hero are still
+     the v1 markup. New v2 chrome opts into the serif explicitly. */
   font-family: var(--font-montserrat), sans-serif;
+  background: var(--gc-bone);
+  color: var(--gc-ink);
 }
 
-/* swiper.css */
-.swiper-button-prev,
-.swiper-button-next {
-  color: theme('colors.primary') !important;
-  /* Use Tailwind's primary color */
-  background-color: white !important;
-  /* White background for visibility */
-  padding: 0.8rem;
-  /* Small padding for the background */
-  border-radius: 100%;
-  /* Circular background */
-  width: 2rem !important;
-  /* Ensure consistent size */
-  height: 2rem !important;
-  opacity: 0.9;
-  /* Slight transparency for a subtle look */
-  --swiper-navigation-size: 1rem;
-  /* Adjust this value to change the arrow size */
-  font-weight: 900 !important;
-  /* Make it heavier (e.g., 700, 800, 900 for bolder look) */
-
-  opacity: 0.9;
+/* Reserved for the hero foot, which is a row of names and a scroll cue, not a
+   label above content. Section eyebrows are not part of this design. */
+.gc-eyebrow {
+  font-family: var(--gc-sans);
+  font-weight: 400;
+  font-size: clamp(9.5px, 1.05vw, 11px);
+  letter-spacing: .3em;
+  text-transform: uppercase;
 }
 
-.swiper-button-prev:hover,
-.swiper-button-next:hover {
+/* Labels that genuinely carry information (Seated, Rate, column headings) keep
+   their words but not the letterspaced-caps treatment. Set in the serif at
+   reading size, so they read as part of the text rather than above it. */
+.gc-label {
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.86rem, 1.05vw, .95rem);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--gc-ink-soft);
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--gc-gold);
+  outline-offset: 4px;
+}
+
+/* ---------------------------------------------------------------- header -- */
+.gc-hdr {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  height: var(--gc-hdr-h);
+  /* Three tracks rather than space-between, so the wordmark is centred on the
+     viewport and not on whatever is left between Menu and Enquire. */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 var(--gc-pad);
+  transition: height .5s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* Solid from the first pixel rather than fading in at the dock. The bar owns
+   its own ground now, so nothing behind it gets a say in whether the labels
+   are legible. */
+.gc-hdr::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gc-bone);
+  border-bottom: 1px solid var(--gc-hairline);
+}
+
+.gc-hdr.is-docked { height: 62px; }
+.gc-hdr.is-docked .gc-hdr-mark img { height: clamp(26px, 2.8vw, 34px); }
+
+/* Scoped through .gc-hdr on purpose. The Menu control is a <button>, which
+   needs an explicit `color` from .gc-hdr-btn to escape the UA stylesheet — and
+   a bare .gc-hdr-cell would tie with that rule on specificity and lose on
+   source order, leaving Menu stuck on one colour. */
+.gc-hdr .gc-hdr-cell {
+  color: var(--gc-oxblood);
+}
+
+.gc-hdr-btn {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 6px 0;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  font-family: var(--gc-sans);
+  /* Small letterspaced caps at this size need the extra weight to hold their
+     counters — 400 goes spindly. */
+  font-weight: 600;
+  font-size: clamp(9.5px, 1.05vw, 11px);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gc-hdr-left { justify-self: start; }
+
+/* The logo itself. Sized by height rather than width — the bar's height is the
+   constraint, and the mark is 2.16:1, so height is what decides whether it
+   fits. */
+.gc-hdr-mark {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  line-height: 0;
+}
+
+.gc-hdr-mark img {
+  height: clamp(30px, 3.4vw, 42px);
+  width: auto;
+  display: block;
+}
+
+.gc-hdr-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.4vw, 34px);
+}
+
+.gc-rules { display: inline-flex; flex-direction: column; gap: 4px; width: 20px; }
+.gc-rules i { display: block; height: 1px; background: currentColor; transition: transform .4s ease; }
+.gc-hdr-btn:hover .gc-rules i:first-child { transform: translateX(4px); }
+
+.gc-enq {
+  border: 1px solid currentColor;
+  padding: 9px 18px;
+  transition: background .35s ease, color .35s ease, border-color .35s ease;
+}
+
+.gc-enq:hover {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+  color: var(--gc-oxblood-deep);
+}
+
+@media (max-width: 720px) {
+  .gc-phone { display: none; }
+  :root { --gc-hdr-h: 64px; }
+  .gc-hdr-mark img { height: 30px; }
+}
+
+@media (max-width: 420px) {
+  .gc-enq { padding: 8px 13px; }
+  .gc-hdr-mark img { height: 26px; }
+}
+
+/* ----------------------------------------------------------------- intro -- */
+/* The wordmark holds alone on bone, then dissolves into the hero. Driven
+   entirely by CSS with a forwards fill, so it clears itself even if the JS
+   never runs. */
+.gc-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--gc-bone);
+  display: grid;
+  place-items: center;
+  padding: var(--gc-pad);
+  animation: gc-intro-out .75s cubic-bezier(.4, 0, .2, 1) 2.4s forwards;
+}
+
+.gc-intro-mark {
+  width: clamp(228px, 38vw, 460px);
+  animation: gc-intro-lift .75s cubic-bezier(.4, 0, .2, 1) 2.4s both;
+}
+
+.gc-intro-mark img { width: 100%; height: auto; }
+
+.gc-intro-mark img {
+  animation: gc-intro-in 1.05s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes gc-intro-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Scaling up very slightly as it goes reads as moving into the page rather
+   than simply switching off. */
+@keyframes gc-intro-lift { to { transform: scale(1.045); } }
+
+@keyframes gc-intro-out {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+/* Only ever added by JS, so a hydration failure cannot strand the scroll lock. */
+.gc-intro-lock, .gc-intro-lock body { overflow: hidden; }
+
+/* ------------------------------------------------------------------ hero -- */
+.gc-hero {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  color: var(--gc-bone);
+}
+
+.gc-stage { position: absolute; inset: 0; touch-action: pan-y; }
+
+.gc-frame {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 1.6s cubic-bezier(.4, 0, .2, 1);
+}
+
+.gc-frame.is-on { opacity: 1; }
+
+/* <picture> is a wrapper only — let the <img> be the layout child of .gc-kb. */
+.gc-frame picture { display: contents; }
+
+.gc-frame img,
+.gc-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Very slow drift so a still frame never sits completely dead. */
+.gc-kb {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.09);
+  transition: transform 9.5s linear;
+}
+
+.gc-frame.is-on .gc-kb { transform: scale(1); }
+
+/* No drift on the clip. It already moves, and continuously re-compositing a
+   scaled 1080p video for nine seconds is what makes playback judder. */
+.gc-frame--video .gc-kb {
+  transform: none !important;
+  transition: none;
+}
+
+/* Shading only, no colour cast — the greens stay green.
+   
+   This is the whole legibility budget for the hero now that the copy carries
+   no shadow of its own. Two layers: an even wash so the picture is dimmed
+   consistently whichever frame is up, and a wide feathered pool concentrated
+   where the copy sits. The pool is what lets the wash stay light — without it
+   the flat overlay would have to go dark enough to kill the photograph, since
+   the headline can land on open sky one frame and dark canopy the next. */
+.gc-scrim-grad {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 66% at 50% 50%,
+        rgba(18, 16, 14, .40) 0%,
+        rgba(18, 16, 14, .26) 46%,
+        rgba(18, 16, 14, 0) 80%),
+    linear-gradient(180deg,
+        rgba(18, 16, 14, .28) 0%,
+        rgba(18, 16, 14, .26) 38%,
+        rgba(18, 16, 14, .36) 70%,
+        rgba(18, 16, 14, .64) 100%);
+}
+
+.gc-hero-mid {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Symmetric, and sized off the bar rather than a flat number. The old
+     76px/190px split meant justify-content:center was centring the content in
+     a box whose bottom was 114px shorter than its top, so the block sat high
+     and crowded the header. Equal padding puts it in the middle of the hero,
+     and the top clears the bar with room of its own. */
+  padding: calc(var(--gc-hdr-h) + clamp(16px, 3.4vh, 40px)) var(--gc-pad);
+  text-align: center;
+  pointer-events: none;
+  opacity: clamp(0, calc(1 - var(--gc-p, 0) * 1.7), 1);
+}
+
+.gc-hero-mid > * { pointer-events: auto; }
+
+.gc-thesis {
+  margin: 0;
+  font-family: var(--gc-serif);
+  /* 500, well up from the 200 Newsreader gets on bone elsewhere. A light
+     high-contrast serif is lovely on a flat ground and disappears over moving
+     photography — weight is the whole legibility budget here. */
+  font-weight: 500;
+  font-size: clamp(1.8rem, 4.4vw, 3.7rem);
+  line-height: 1.03;
+  letter-spacing: -.018em;
+  text-wrap: balance;
+  /* Wide enough that the sentence balances over two lines, not three. The
+     break wants ~35 characters a line, so anything under 36ch drops a third. */
+  max-width: 38ch;
+  color: #fefdfb;
+}
+
+.gc-hero-sub {
+  margin: clamp(16px, 2.2vw, 24px) 0 0;
+  font-family: var(--gc-serif);
+  /* Matches the thesis: at this size the picture underneath does more damage
+     to it, and hierarchy is carried by size rather than weight. */
+  font-weight: 500;
+  font-size: clamp(.98rem, 1.55vw, 1.22rem);
+  line-height: 1.6;
+  /* Wide enough that the sentence breaks over two lines, not three. */
+  max-width: 58ch;
+  text-wrap: balance;
+  color: rgba(253, 251, 248, .93);
+}
+
+.gc-hero-cta {
+  margin-top: clamp(26px, 3.2vw, 38px);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--gc-sans);
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gc-bone);
+  text-decoration: none;
+  border: 1px solid var(--gc-hairline-bone);
+  padding: 14px 26px;
+  transition: background .4s ease, color .4s ease, border-color .4s ease;
+}
+
+.gc-hero-cta:hover {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+  color: var(--gc-oxblood-deep);
+}
+
+/* The address, sitting under the enquiry button in the first view. Quieter
+   than the button on purpose — it is the answer to a question the visitor is
+   already asking, not a second thing being asked of them. Set well clear of
+   the button so the two do not read as one stacked control. */
+.gc-hero-place {
+  margin-top: clamp(52px, 7vw, 88px);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  letter-spacing: .12em;
+  color: rgba(253, 251, 248, .86);
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid transparent;
+  transition: color .35s ease, border-color .35s ease;
+}
+
+.gc-hero-place svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  fill: none;
+  stroke: var(--gc-gold);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gc-hero-place:hover {
+  color: var(--gc-bone);
+  border-bottom-color: var(--gc-gold);
+}
+
+/* A laptop in a browser with tabs and a bookmarks bar is not a tall viewport.
+   The gap above the address is the most expendable space in the block, so it
+   is what gets given back rather than the copy shrinking. */
+@media (max-height: 760px) {
+  .gc-hero-place { margin-top: clamp(24px, 3.6vh, 40px); }
+}
+
+.gc-hero-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  padding: 20px var(--gc-pad) clamp(22px, 3vw, 34px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 18px;
+  opacity: clamp(0, calc(1 - var(--gc-p, 0) * 1.7), 1);
+}
+
+.gc-hero-foot::before {
+  content: "";
+  position: absolute;
+  left: var(--gc-pad);
+  right: var(--gc-pad);
+  top: 0;
+  height: 1px;
+  background: var(--gc-hairline-bone);
+}
+
+.gc-hero-spaces {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* Space alone separates the names. Gold diamonds between them read as
+     decoration on a row that is already doing nothing but listing. */
+  gap: clamp(14px, 2.4vw, 32px);
+  font-weight: 600;
+  color: rgba(253, 251, 248, .88);
+}
+
+.gc-hero-spaces span { display: inline-flex; align-items: center; white-space: nowrap; }
+
+.gc-scroll-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: rgba(253, 251, 248, .55);
+}
+
+.gc-scroll-cue i {
+  display: block;
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(180deg, rgba(253, 251, 248, .6), rgba(253, 251, 248, 0));
+  animation: gc-cue 2.6s ease-in-out infinite;
+}
+
+@keyframes gc-cue {
+  0%, 100% { transform: scaleY(.45); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+}
+
+.gc-ticks { justify-self: end; display: flex; gap: 9px; align-items: center; }
+
+.gc-tick {
+  appearance: none;
+  border: 0;
+  padding: 12px 0;
+  background: none;
+  cursor: pointer;
+  width: 34px;
+}
+
+.gc-tick i {
+  display: block;
+  height: 1px;
+  background: rgba(253, 251, 248, .34);
+  position: relative;
+  overflow: hidden;
+}
+
+.gc-tick i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gc-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: none;
+}
+
+/* The fill runs for exactly as long as the frame is held, so the bar doubles
+   as a read on how much of this frame is left. */
+.gc-tick.is-on i::after {
+  transform: scaleX(1);
+  transition: transform var(--gc-hold, 6000ms) linear;
+}
+
+.gc-tick:hover i { background: rgba(253, 251, 248, .7); }
+
+/* On narrow screens the four names and the progress ticks cannot share a row
+   without the names wrapping into a cramped block. Stack them instead: ticks on
+   their own centred row, then the names spread edge to edge underneath. */
+@media (max-width: 820px) {
+  .gc-hero-foot {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .gc-scroll-cue { display: none; }
+
+  .gc-ticks {
+    order: 1;
+    justify-self: center;
+  }
+
+  .gc-tick { width: 30px; }
+
+  .gc-hero-spaces {
+    order: 2;
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    font-size: 9px;
+    letter-spacing: .16em;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .gc-hero-spaces { font-size: 8px; letter-spacing: .08em; }
+}
+
+/* ---------------------------------------------------------------- menu -- */
+.gc-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--gc-oxblood-deep);
+  color: var(--gc-bone);
+  padding: clamp(88px, 11vw, 120px) var(--gc-pad) var(--gc-pad);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(30px, 5vw, 64px);
+  align-content: start;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .5s ease, visibility .5s;
+  overflow-y: auto;
+}
+
+@media (min-width: 900px) {
+  .gc-menu { grid-template-columns: 1.35fr 1fr; align-content: center; }
+
+  /* The side column's content is far narrower than the track it sits in, so
+     it floated in the middle of a mostly empty half. Anchored to the right
+     edge, the overlay has two aligned edges instead of one and a drift. */
+  .gc-menu-side { justify-self: end; min-width: 260px; }
+}
+
+.gc-menu.is-open { opacity: 1; visibility: visible; }
+
+.gc-menu-close {
+  position: absolute;
+  top: 26px;
+  right: var(--gc-pad);
+  appearance: none;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font-family: var(--gc-sans);
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  padding: 10px 0;
+}
+
+.gc-menu-list { list-style: none; margin: 0; padding: 0; }
+.gc-menu-list li { border-bottom: 1px solid rgba(253, 251, 248, .14); }
+
+.gc-menu-list a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(14px, 2vw, 22px) 0;
+  text-decoration: none;
+  color: inherit;
+  transition: padding-left .45s cubic-bezier(.4, 0, .2, 1), color .35s ease;
+}
+
+.gc-menu-list a:hover { padding-left: 16px; color: var(--gc-gold); }
+
+.gc-menu-name {
+  font-family: var(--gc-serif);
+  font-weight: 200;
+  font-size: clamp(1.6rem, 4.2vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -.015em;
+}
+
+.gc-menu-cap {
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  /* Up a point from 11px: caps set solid need the size back that the tracking
+     was giving them. */
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(253, 251, 248, .55);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.gc-menu-side {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+}
+
+.gc-menu-side .gc-menu-label { color: var(--gc-gold); display: block; margin-bottom: 10px; }
+.gc-menu-side a { color: rgba(253, 251, 248, .82); text-decoration: none; display: block; padding: 5px 0; }
+.gc-menu-side a:hover { color: var(--gc-gold); }
+
+/* --------------------------------------------------------- load sequence -- */
+.gc-rise {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: gc-rise 1.15s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+
+@keyframes gc-rise { to { opacity: 1; transform: none; } }
+
+/* Timed to land as the intro dissolves, so the hero assembles itself instead
+   of being already finished when the overlay clears. */
+.gc-d1 { animation-delay: 2.6s; }
+.gc-d2 { animation-delay: 2.9s; }
+.gc-d3 { animation-delay: 3.05s; }
+.gc-d4 { animation-delay: 3.2s; }
+.gc-d5 { animation-delay: 3.35s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .gc-intro { animation: gc-intro-out .3s linear 2.1s forwards; }
+  .gc-intro-mark,
+  .gc-intro-mark img { animation: none; }
+  .gc-kb { transition: none; transform: none !important; }
+  .gc-rail-track { transition: none; }
+  .gc-frame { transition-duration: .001ms; }
+  .gc-scroll-cue i { animation: none; }
+  .gc-tick.is-on i::after { transition: none; }
+}
+
+/* ==========================================================================
+   Sections below the hero
+   ========================================================================== */
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ------------------------------------------------------------ scroll reveal */
+/* The hidden state is scoped to .gc-reveal-ready, and only the inline script in
+   layout.js adds that class. No JS, or reduced motion, means the class never
+   lands and every block renders visible — nothing can be stranded invisible.
+   Long and gentle on purpose: this should feel like the page settling, not
+   like anything arriving. */
+.gc-reveal-ready [data-gc-reveal],
+.gc-reveal-ready [data-gc-reveal-group] > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 1.15s var(--gc-ease-soft) var(--gc-reveal-delay, 0ms),
+    transform 1.15s var(--gc-ease-soft) var(--gc-reveal-delay, 0ms);
+}
+
+.gc-reveal-ready [data-gc-reveal].is-in,
+.gc-reveal-ready [data-gc-reveal-group].is-in > * {
   opacity: 1;
-  /* Full opacity on hover */
+  transform: none;
 }
 
-.swiper-pagination-bullet {
-  background-color: theme('colors.secondary') !important;
-  /* Match primary color */
+/* Pictures carry more weight, so they take longer to settle and come from a
+   whisker larger. Needs an overflow clip on whatever wraps them. */
+.gc-reveal-ready [data-gc-reveal="media"] {
+  transform: translateY(24px) scale(1.03);
+  transition-duration: 1.55s, 1.55s;
 }
 
-.swiper-pagination-bullet-active {
-  background-color: theme('colors.white') !important;
-  /* Active dot */
+/* The cascade inside a group. Six is more children than any block here has. */
+.gc-reveal-ready [data-gc-reveal-group] > *:nth-child(1) { --gc-reveal-delay: 0ms; }
+.gc-reveal-ready [data-gc-reveal-group] > *:nth-child(2) { --gc-reveal-delay: 95ms; }
+.gc-reveal-ready [data-gc-reveal-group] > *:nth-child(3) { --gc-reveal-delay: 190ms; }
+.gc-reveal-ready [data-gc-reveal-group] > *:nth-child(4) { --gc-reveal-delay: 285ms; }
+.gc-reveal-ready [data-gc-reveal-group] > *:nth-child(5) { --gc-reveal-delay: 380ms; }
+.gc-reveal-ready [data-gc-reveal-group] > *:nth-child(6) { --gc-reveal-delay: 475ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-reveal-ready [data-gc-reveal],
+  .gc-reveal-ready [data-gc-reveal-group] > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
+
+/* The header is fixed, so anchored jumps have to clear it. */
+.gc-place,
+.gc-services,
+.gc-cards,
+.gc-find,
+.gc-fac,
+.gc-menu-sec,
+.gc-packs,
+.gc-foot {
+  scroll-margin-top: calc(var(--gc-hdr-h) + 20px);
+}
+
+/* -------------------------------------------------------------- the place -- */
+/* No label column any more, so the paragraph gets the width instead: a long
+   measure that lands the summary in about three lines rather than five. */
+.gc-place {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(90px, 13vw, 180px) var(--gc-pad) clamp(70px, 10vw, 130px);
+}
+
+.gc-place-lead {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+  line-height: 1.42;
+  letter-spacing: -.008em;
+  max-width: 70ch;
+  text-wrap: balance;
+}
+
+.gc-place-sub {
+  margin: 1.1em 0 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.98rem, 1.4vw, 1.1rem);
+  line-height: 1.72;
+  color: var(--gc-ink-soft);
+  max-width: 52ch;
+}
+
+/* ---------------------------------------------------------- service tiles -- */
+.gc-services {
+  border-top: 1px solid var(--gc-hairline);
+  border-bottom: 1px solid var(--gc-hairline);
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* Two up before four, so the labels never end up in columns too narrow to
+   hold them beside the icon. */
+@media (min-width: 620px) {
+  .gc-services { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1020px) {
+  .gc-services { grid-template-columns: repeat(4, 1fr); }
+}
+
+.gc-svc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(44px, 5.6vw, 76px) 20px;
+  text-decoration: none;
+  color: var(--gc-ink);
+  border-bottom: 1px solid var(--gc-hairline);
+  transition: background .45s ease;
+}
+
+/* Stacked: the section's own bottom border closes the last tile. */
+.gc-svc:last-child { border-bottom: 0; }
+
+/* Two up, so two rows: the dividers run between the columns, and only the
+   first row keeps a rule under it. */
+@media (min-width: 620px) and (max-width: 1019px) {
+  .gc-svc { border-right: 1px solid var(--gc-hairline); }
+  .gc-svc:nth-child(2n) { border-right: 0; }
+  .gc-svc:nth-last-child(-n+2) { border-bottom: 0; }
+}
+
+@media (min-width: 1020px) {
+  .gc-svc { border-bottom: 0; border-right: 1px solid var(--gc-hairline); }
+  .gc-svc:last-child { border-right: 0; }
+}
+
+.gc-svc:hover { background: var(--gc-bone-2); }
+
+.gc-svc svg {
+  width: 34px;
+  height: 34px;
+  stroke: var(--gc-gold);
+  fill: none;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .5s cubic-bezier(.4, 0, .2, 1);
+}
+
+.gc-svc:hover svg { transform: translateY(-5px); }
+
+.gc-svc-name {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.16rem, 1.9vw, 1.44rem);
+}
+
+/* -------------------------------------------------------------- find us -- */
+.gc-find { padding-top: clamp(64px, 8vw, 110px); }
+
+.gc-find-body {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .gc-find-body { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+}
+
+.gc-find-map {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--gc-bone-2);
+  overflow: hidden;
+}
+
+.gc-find-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* What stands in for the map until it is asked for. Deliberately plain: it is
+   an explanation and a button, not a fake map. */
+.gc-find-holder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2vw, 22px);
+  padding: clamp(24px, 3vw, 40px);
+  text-align: center;
+}
+
+.gc-find-holder p {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.95rem, 1.3vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--gc-ink-soft);
+  max-width: 34ch;
+}
+
+.gc-find-detail {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(22px, 2.8vw, 32px);
+  align-items: flex-start;
+}
+
+.gc-find-label {
+  margin: 0 0 8px;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+}
+
+.gc-find-text {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.06rem, 1.7vw, 1.28rem);
+  line-height: 1.45;
+  color: var(--gc-ink);
+}
+
+.gc-find-text a {
+  color: inherit;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  transition: color .3s ease;
+}
+
+.gc-find-text a:hover { color: var(--gc-oxblood); }
+
+/* The section's own CTA is not inside a grid column, so it needs the reset the
+   detail-page rule gives its own. */
+.gc-find-detail .gc-space-cta { margin-top: clamp(4px, 1vw, 8px); }
+
+/* Under the map, address and numbers sit side by side. Stacked they were two
+   short blocks running down a full-width column with most of the row empty
+   beside them — a phone has the width for both, it just has no height to
+   spare. The button keeps the full row underneath. */
+@media (max-width: 899px) {
+  .gc-find-detail {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 5vw, 30px) clamp(18px, 5vw, 32px);
+    align-items: start;
+  }
+
+  .gc-find-detail .gc-space-cta { grid-column: 1 / -1; margin-top: 0; }
+}
+
+/* ------------------------------------------------------- facility cards -- */
+.gc-cards { padding-top: clamp(64px, 8vw, 110px); }
+
+.gc-card-grid {
+  list-style: none;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 3.4vw, 44px);
+}
+
+@media (min-width: 1020px) {
+  .gc-card-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Below four across it scrolls rather than wraps. Two rows of two was the
+   worst of both — it read as a grid that had run out of room, and stacked one
+   per row it became a very long column of the same four things. A rail keeps
+   them one row at any width, and the next card peeking past the edge is what
+   tells you it moves. */
+@media (max-width: 1019px) {
+  .gc-card-grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(220px, 68vw);
+    gap: clamp(14px, 3.4vw, 22px);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    /* The inset has to be repeated as scroll padding, or a snapped card lands
+       flush against the screen edge instead of against the page's margin. */
+    scroll-padding-left: var(--gc-pad);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gc-card-grid::-webkit-scrollbar { display: none; }
+  .gc-card-grid > li { scroll-snap-align: start; }
+}
+
+.gc-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--gc-ink);
+}
+
+/* The clip lives here, so the picture can grow inside a box that does not.
+   isolation:isolate keeps the gold blend below from reaching the page. */
+.gc-card-media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--gc-bone-2);
+  margin-bottom: clamp(16px, 1.8vw, 22px);
+}
+
+.gc-card-media picture { display: contents; }
+
+/* Four photographs from four different sources: a green lawn, red cinema
+   seats, a beige banquet and a pink sunset. Side by side they read as four
+   stock images rather than one venue. Pulling the saturation down and laying
+   gold over the hue is what makes them a set. */
+.gc-card-media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+  filter: saturate(.58) contrast(1.04);
+  transition: transform 1.1s var(--gc-ease-soft), filter .6s ease;
+}
+
+/* mix-blend-mode: color takes the gold's hue and leaves the picture's own
+   light and shade — a tint rather than a wash, so the tree still reads as a
+   tree. */
+.gc-card-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--gc-gold);
+  mix-blend-mode: color;
+  opacity: .44;
+  transition: opacity .6s ease;
+}
+
+/* Hover lifts the treatment as well as the picture, so the real photograph is
+   the reward for looking closer. */
+.gc-card:hover .gc-card-media img {
+  transform: scale(1.045);
+  filter: saturate(.98) contrast(1);
+}
+
+.gc-card:hover .gc-card-media::after { opacity: .1; }
+
+/* Sentence case, not letterspaced caps — a fact about the space rather than a
+   label sitting above its name. */
+.gc-card-meta {
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.88rem, 1.2vw, .95rem);
+  line-height: 1.4;
+  color: var(--gc-ink-soft);
+  margin-bottom: 5px;
+}
+
+.gc-card-name {
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.3rem, 2.1vw, 1.6rem);
+  line-height: 1.15;
+  letter-spacing: -.014em;
+  transition: color .35s ease;
+}
+
+.gc-card:hover .gc-card-name { color: var(--gc-oxblood); }
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-card-media img { transition: none; }
+  .gc-card:hover .gc-card-media img { transform: none; }
+  .gc-card-media::after { transition: none; }
+}
+
+/* ------------------------------------------------------- section headings -- */
+.gc-sec-head {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad) clamp(40px, 6vw, 80px);
+}
+
+/* Headline left, the paragraph that would otherwise have been written over the
+   banner on the right. Keeping the prose on bone rather than on a photograph is
+   what lets the banner stay a picture. */
+@media (min-width: 900px) {
+  .gc-sec-head--split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+  }
+}
+
+.gc-sec-lead {
+  margin: clamp(18px, 2.4vw, 0px) 0 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.45vw, 1.16rem);
+  line-height: 1.65;
+  color: var(--gc-ink-soft);
+  max-width: 54ch;
+}
+
+.gc-sec-title {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.6rem, 3.4vw, 2.8rem);
+  line-height: 1.16;
+  letter-spacing: -.014em;
+  text-wrap: balance;
+  max-width: 20ch;
+}
+
+/* ------------------------------------------------------------- page hero -- */
+/* The opening frame on an inner page. Full bleed, unlike the rail below it —
+   the page arrives wide and then narrows into the framed content, which is the
+   whole rhythm of the thing. Shorter than the home hero on purpose: this one
+   is an entrance, not a destination. */
+.gc-page-hero {
+  position: relative;
+  overflow: hidden;
+  height: clamp(400px, 62vh, 660px);
+  color: var(--gc-bone);
+}
+
+.gc-page-hero picture { display: contents; }
+
+.gc-page-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* The home hero's overlay, exactly: an even wash plus a feathered pool where
+   the type sits. A single flat ramp was not enough here — this frame is bright
+   sky and pale grass through its whole middle, and bone type on it disappeared.
+   No shadow on the type; the ground under it does that job. */
+.gc-page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(110% 70% at 50% 50%,
+        rgba(18, 16, 14, .42) 0%,
+        rgba(18, 16, 14, .28) 46%,
+        rgba(18, 16, 14, 0) 80%),
+    linear-gradient(180deg,
+        rgba(18, 16, 14, .30) 0%,
+        rgba(18, 16, 14, .28) 38%,
+        rgba(18, 16, 14, .34) 70%,
+        rgba(18, 16, 14, .50) 100%);
+}
+
+.gc-page-hero-cap {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gc-hdr-h) var(--gc-pad) 0;
+  text-align: center;
+}
+
+/* The rule sits under the name here, not over it. Above the name it is an
+   eyebrow by another means; below, it is a full stop. */
+.gc-page-hero-rule {
+  width: 64px;
+  height: 1px;
+  background: var(--gc-gold);
+  margin-top: clamp(20px, 2.6vw, 30px);
+  opacity: .9;
+}
+
+.gc-page-hero-name {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  line-height: 1;
+  letter-spacing: -.022em;
+}
+
+/* ------------------------------------------------------------ facilities -- */
+.gc-fac { padding-top: clamp(60px, 8vw, 104px); }
+
+/* Contained, never full bleed. The bone margin either side is doing real work:
+   it frames the picture as one considered object instead of letting it run to
+   the edges like a background. */
+.gc-rail {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+}
+
+.gc-rail-view {
+  position: relative;
+  overflow: hidden;
+  /* Ground under a frame that has not decoded yet, so the slot never flashes
+     white in the middle of a bone page. */
+  background: var(--gc-bone-2);
+}
+
+.gc-rail-track {
+  display: flex;
+  transition: transform 1.05s var(--gc-ease-soft);
+}
+
+.gc-slide {
+  position: relative;
+  flex: 0 0 100%;
+  margin: 0;
+  overflow: hidden;
+  /* Wide enough to be the picture, short enough that the section below is
+     always promised at the bottom of the screen. */
+  aspect-ratio: 3 / 2;
+  max-height: 74vh;
+}
+
+@media (min-width: 900px) { .gc-slide { aspect-ratio: 16 / 9; } }
+
+.gc-slide picture { display: contents; }
+
+.gc-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* The inscription is written on the picture, so it brings its own ground.
+   
+   Weighted to the reading side, not to the bottom edge. A bottom-only ramp was
+   what was here, and it failed on the tall captions: "Eco-friendly Large
+   Auditorium" wraps to two lines and starts near the middle of the frame,
+   where that ramp was still fully transparent — over bright sky, bone type on
+   it came out at about 1.1:1.
+   
+   Bone is around .96 luminance, so holding 3:1 against a pale frame needs the
+   ground under it down near .29 — roughly a two-thirds knock-down. That is a
+   lot of darkness to put on a photograph, which is exactly why it is a
+   horizontal gradient: heavy through the left where the words are, gone by
+   about 80% across, so the subject of every one of these frames stays open. */
+.gc-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(96deg,
+        rgba(18, 16, 14, .66) 0%,
+        rgba(18, 16, 14, .56) 22%,
+        rgba(18, 16, 14, .30) 46%,
+        rgba(18, 16, 14, .06) 70%,
+        rgba(18, 16, 14, 0) 84%),
+    linear-gradient(180deg,
+        rgba(18, 16, 14, .06) 0%,
+        rgba(18, 16, 14, .06) 34%,
+        rgba(18, 16, 14, .16) 68%,
+        rgba(18, 16, 14, .34) 100%);
+}
+
+/* Narrow screens put the caption across the full width, so there is no reading
+   side to weight — it goes back to a ramp, but a real one this time. */
+@media (max-width: 720px) {
+  .gc-slide::after {
+    background: linear-gradient(180deg,
+        rgba(18, 16, 14, .16) 0%,
+        rgba(18, 16, 14, .22) 30%,
+        rgba(18, 16, 14, .52) 62%,
+        rgba(18, 16, 14, .80) 100%);
+  }
+}
+
+.gc-slide-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(24px, 3.6vw, 56px);
+  color: var(--gc-bone);
+}
+
+/* The same gold hairline that opens the hero, so the two read as one hand. */
+.gc-slide-rule {
+  width: 40px;
+  height: 1px;
+  background: var(--gc-gold);
+  margin-bottom: clamp(14px, 1.8vw, 20px);
+  opacity: .9;
+}
+
+.gc-slide-name {
+  margin: clamp(10px, 1.2vw, 14px) 0 0;
+  font-family: var(--gc-serif);
+  /* Lighter than the hero thesis: this one sits on a still frame with a scrim
+     under it, so it can afford the elegance the hero could not. */
+  font-weight: 300;
+  font-size: clamp(1.9rem, 4vw, 3.15rem);
+  line-height: 1.04;
+  letter-spacing: -.018em;
+  text-wrap: balance;
+  max-width: 16ch;
+}
+
+.gc-slide-note {
+  margin: .6em 0 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.98rem, 1.4vw, 1.14rem);
+  line-height: 1.55;
+  color: rgba(253, 251, 248, .9);
+  max-width: 42ch;
+}
+
+.gc-slide-cta {
+  margin-top: clamp(20px, 2.4vw, 30px);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--gc-sans);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gc-bone);
+  text-decoration: none;
+  border: 1px solid var(--gc-hairline-bone);
+  padding: 13px 24px;
+  transition: background .4s ease, color .4s ease, border-color .4s ease;
+}
+
+.gc-slide-cta svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .4s var(--gc-ease-soft);
+}
+
+.gc-slide-cta:hover {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+  color: var(--gc-oxblood-deep);
+}
+
+.gc-slide-cta:hover svg { transform: translateX(4px); }
+
+/* -------------------------------------------------------------- rail bar -- */
+.gc-rail-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: clamp(16px, 2vw, 24px);
+}
+
+.gc-rail-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(14px, 2.2vw, 30px);
+}
+
+/* Montserrat, a step up from the fine print this was set in but no more than
+   that — it is navigation under the picture, not a heading. Tracking moves
+   inversely to the size: .3em was fine at 11px and far too wide at 13px. */
+.gc-rail-name {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 6px 0;
+  cursor: pointer;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+  transition: color .35s ease, border-color .35s ease;
+}
+
+.gc-rail-name:hover { color: var(--gc-oxblood); }
+.gc-rail-name.is-on { color: var(--gc-oxblood); border-bottom-color: var(--gc-gold); }
+
+.gc-rail-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 16px);
+  margin-left: auto;
+}
+
+.gc-rail-count {
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(11px, .95vw, 12px);
+  letter-spacing: .18em;
+  font-variant-numeric: tabular-nums;
+  color: var(--gc-ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gc-rail-count i {
+  width: 22px;
+  height: 1px;
+  background: var(--gc-hairline);
+  display: block;
+}
+
+.gc-rail-arrow {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--gc-hairline);
+  color: var(--gc-oxblood);
+  display: grid;
+  place-items: center;
+  transition: background .35s ease, color .35s ease, border-color .35s ease;
+}
+
+.gc-rail-arrow:hover {
+  background: var(--gc-oxblood);
+  border-color: var(--gc-oxblood);
+  color: var(--gc-bone);
+}
+
+.gc-rail-arrow svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gc-rail-arrow--prev svg { transform: scaleX(-1); }
+
+/* Below this the four names and the arrows cannot share a line without one of
+   them wrapping badly. The names are the redundant half — the rail swipes. */
+@media (max-width: 720px) {
+  .gc-rail-names { display: none; }
+  /* space-between across three children pushed prev and next to opposite
+     ends of the screen. The count takes the slack instead, so the two arrows
+     stay a thumb's width apart and can be worked with one hand. */
+  .gc-rail-nav { margin-left: 0; width: 100%; }
+  .gc-rail-count { margin-right: auto; }
+}
+
+/* --------------------------------------------------------- facility list -- */
+/* The same four read down in one pass. Still no detail: a name, the one line,
+   and the number. Anything longer is a page. */
+.gc-fac-list {
+  list-style: none;
+  max-width: 1320px;
+  margin: clamp(56px, 7vw, 100px) auto 0;
+  padding: 0 var(--gc-pad);
+}
+
+.gc-fac-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px clamp(20px, 3vw, 48px);
+  padding: clamp(22px, 2.6vw, 32px) 0;
+  border-top: 1px solid var(--gc-hairline);
+  text-decoration: none;
+  color: var(--gc-ink);
+}
+
+.gc-fac-list li:last-child .gc-fac-row { border-bottom: 1px solid var(--gc-hairline); }
+
+@media (min-width: 900px) {
+  .gc-fac-row {
+    /* Not a ch measure: the column resolves against the grid's font size but
+       the name renders at 1.7rem in the serif, so 20ch was a third short and
+       "Eco-friendly Auditorium" broke over two lines. */
+    grid-template-columns: minmax(200px, 28%) minmax(0, 1fr) auto 24px;
+    align-items: center;
+  }
+}
+
+.gc-fac-name {
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -.014em;
+  transition: color .35s ease;
+}
+
+/* Stacked, the name and its line were a third of a step apart in size and
+   nothing else told them apart — both serif, both on bone, one under the
+   other. On a wide screen the columns did that job; on a phone the type has
+   to. The name goes up, the line goes down and greys off, and the gap between
+   a row's own two lines stays smaller than the gap between rows. */
+@media (max-width: 899px) {
+  .gc-fac-row { gap: 9px clamp(16px, 4vw, 24px); padding: clamp(26px, 6vw, 34px) 0; }
+  .gc-fac-name { font-size: clamp(1.45rem, 5.6vw, 1.75rem); }
+  .gc-fac-note { font-size: .94rem; line-height: 1.5; }
+}
+
+.gc-fac-note {
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.95rem, 1.3vw, 1.05rem);
+  line-height: 1.55;
+  color: var(--gc-ink-soft);
+  max-width: 46ch;
+  grid-column: 1 / -1;
+}
+
+.gc-fac-seated {
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(12px, 1.15vw, 14px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--gc-ink-soft);
+  white-space: nowrap;
+  grid-row: 1;
+  grid-column: 2;
+}
+
+.gc-fac-go {
+  display: none;
+  color: var(--gc-oxblood);
+}
+
+@media (min-width: 900px) {
+  .gc-fac-note { grid-column: auto; }
+  .gc-fac-seated { grid-row: auto; grid-column: auto; }
+  .gc-fac-go { display: grid; place-items: center; }
+}
+
+.gc-fac-go svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .4s var(--gc-ease-soft);
+}
+
+.gc-fac-row:hover .gc-fac-name { color: var(--gc-oxblood); }
+.gc-fac-row:hover .gc-fac-go svg { transform: translateX(5px); }
+
+/* ------------------------------------------------------- facility detail -- */
+/* No hero on these pages, so the fixed bar needs clearing by hand. */
+.gc-detail { padding-top: calc(var(--gc-hdr-h) + clamp(30px, 5vw, 68px)); }
+
+.gc-detail-head,
+.gc-detail-body {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+}
+
+.gc-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--gc-sans);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+  text-decoration: none;
+  transition: color .35s ease;
+}
+
+.gc-back:hover { color: var(--gc-oxblood); }
+
+.gc-back svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .4s var(--gc-ease-soft);
+}
+
+.gc-back:hover svg { transform: translateX(-4px); }
+
+.gc-detail-name {
+  margin: clamp(20px, 2.6vw, 32px) 0 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(2.2rem, 5.4vw, 4.2rem);
+  line-height: 1.03;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+  max-width: 18ch;
+}
+
+.gc-detail-note {
+  margin: .6em 0 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.02rem, 1.6vw, 1.24rem);
+  line-height: 1.6;
+  color: var(--gc-ink-soft);
+  max-width: 46ch;
+}
+
+.gc-detail-media {
+  max-width: 1320px;
+  margin: clamp(36px, 5vw, 64px) auto 0;
+  padding: 0 var(--gc-pad);
+}
+
+.gc-detail-body {
+  padding-top: clamp(40px, 5.4vw, 72px);
+  padding-bottom: clamp(56px, 7vw, 96px);
+}
+
+/* The figures own the top of the reading column, the way they did when this
+   was all one section on the home page. */
+.gc-detail-body .gc-space-figures { margin-top: 0; }
+
+@media (min-width: 900px) {
+  .gc-detail-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  /* The enquiry sits under the figures, not under the lists — it belongs to
+     the numbers it is asking about. justify-self, not align-self: a grid item
+     stretches on the inline axis by default, and align-self:start on the rule
+     itself only ever governed the block axis, so the button was running the
+     full width of the column. */
+  .gc-detail-body .gc-space-cta { grid-column: 1; justify-self: start; }
+  .gc-detail-body .gc-space-lists { grid-row: 1 / span 2; grid-column: 2; margin-top: 0; }
+}
+
+.gc-space-figures {
+  display: flex;
+  gap: clamp(28px, 4vw, 56px);
+  margin: clamp(24px, 3vw, 36px) 0 0;
+  align-items: flex-end;
+}
+
+.gc-space-figures > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6px;
+}
+
+.gc-space-figures dd { margin: 0; }
+.gc-space-figures dt { color: var(--gc-ink-soft); }
+
+/* The whole scale argument, made by four numbers read down the page. */
+.gc-figure {
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--gc-oxblood);
+}
+
+.gc-space-lists {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 2.6vw, 34px);
+  margin: clamp(26px, 3.2vw, 40px) 0 0;
+}
+
+@media (min-width: 560px) {
+  .gc-space-lists { grid-template-columns: 1fr 1fr; }
+}
+
+/* Stacked, the default gap left "Suited to" reading as a continuation of the
+   inclusions above it — two bulleted lists in the same type with a small gap
+   is one long list. A rule and real space make them two blocks. */
+@media (max-width: 559px) {
+  .gc-space-lists { gap: 0; }
+  .gc-space-lists > * + * {
+    margin-top: clamp(34px, 9vw, 46px);
+    padding-top: clamp(30px, 8vw, 40px);
+    border-top: 1px solid var(--gc-hairline);
+  }
+}
+
+.gc-list-label { color: var(--gc-oxblood); margin: 0 0 12px; }
+
+.gc-space-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.94rem, 1.25vw, 1.02rem);
+  line-height: 1.45;
+  color: var(--gc-ink-soft);
+}
+
+.gc-space-list li { padding-left: 16px; position: relative; }
+
+.gc-space-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .62em;
+  width: 5px;
+  height: 1px;
+  background: var(--gc-gold);
+}
+
+.gc-space-cta {
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  margin-top: clamp(28px, 3.4vw, 42px);
+  align-self: start;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--gc-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gc-oxblood);
+  text-decoration: none;
+  border: 1px solid var(--gc-hairline);
+  padding: 14px 24px;
+  transition: background .35s ease, color .35s ease, border-color .35s ease;
+}
+
+.gc-space-cta:hover {
+  background: var(--gc-oxblood);
+  border-color: var(--gc-oxblood);
+  color: var(--gc-bone);
+}
+
+/* Full width on a phone: it is the one action on the page, and a button sized
+   to its label leaves a thumb hunting for it at the bottom of a long read. */
+@media (max-width: 599px) {
+  .gc-space-cta { width: 100%; justify-content: center; text-align: center; }
+  .gc-enq-send .gc-btn { width: 100%; }
+}
+
+/* --------------------------------------------------------------- footer -- */
+.gc-foot {
+  background: var(--gc-oxblood);
+  color: rgba(253, 251, 248, .82);
+  margin-top: clamp(70px, 9vw, 130px);
+  padding: clamp(56px, 7.4vw, 100px) var(--gc-pad) clamp(30px, 4vw, 44px);
+}
+
+.gc-foot-top {
+  max-width: 1320px;
+  margin: 0 auto clamp(40px, 5.4vw, 66px);
+  padding-bottom: clamp(36px, 5vw, 58px);
+  border-bottom: 1px solid rgba(253, 251, 248, .16);
+}
+
+.gc-foot-mark { display: block; line-height: 0; }
+
+/* Knocked back to one colour. The mark's script is the same oxblood as this
+   ground, so in full colour the word "Gig" disappears into it — brightness(0)
+   makes every opaque pixel black, invert(1) makes it white, and the alpha
+   channel is untouched, so the palm survives as a silhouette. The opacity
+   lands it on bone rather than pure white. */
+.gc-foot-mark img {
+  height: clamp(58px, 9vw, 104px);
+  width: auto;
+  display: block;
+  filter: brightness(0) invert(1);
+  opacity: .94;
+  transition: opacity .35s ease;
+}
+
+.gc-foot-mark:hover img { opacity: 1; }
+
+.gc-foot-cols {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(26px, 4vw, 48px);
+}
+
+@media (min-width: 820px) {
+  .gc-foot-cols { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.gc-foot-cols > div { display: flex; flex-direction: column; gap: 8px; }
+/* Cormorant for the titles — the display face, which the site otherwise only
+   uses for the wordmark. At this size uppercase and tracked it reads as a
+   heading rather than as more of the list under it. */
+.gc-foot-label {
+  font-family: var(--gc-display);
+  font-weight: 500;
+  font-size: clamp(1rem, 1.5vw, 1.16rem);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gc-gold);
+  margin-bottom: 10px;
+}
+
+/* Montserrat for the items. Against the Cormorant titles the two do the
+   separating that size alone was doing before. */
+.gc-foot-cols a {
+  color: rgba(253, 251, 248, .82);
+  text-decoration: none;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 400;
+  font-size: clamp(.88rem, 1.2vw, .96rem);
+  letter-spacing: .012em;
+  line-height: 1.55;
+  transition: color .3s ease;
+}
+
+.gc-foot-cols a:hover { color: var(--gc-gold); }
+
+.gc-foot-base {
+  max-width: 1320px;
+  margin: clamp(44px, 6vw, 72px) auto 0;
+  padding-top: clamp(18px, 2.4vw, 26px);
+  border-top: 1px solid rgba(253, 251, 248, .16);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px clamp(16px, 3vw, 40px);
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 400;
+  font-size: clamp(12px, 1.05vw, 13px);
+  letter-spacing: .01em;
+  color: rgba(253, 251, 248, .6);
+}
+
+/* Three items, so the credit takes the middle of a wide row and its own line
+   once they stop fitting.
+   
+   It was set at .42 in stretched uppercase, which on a wide screen spread it
+   between the other two until it read as nothing at all — only on a phone,
+   where it dropped to its own line, was it legible. Sentence case at normal
+   tracking and a real opacity fixes both. */
+.gc-foot-by { color: rgba(253, 251, 248, .58); }
+
+.gc-foot-by a {
+  color: rgba(253, 251, 248, .82);
+  border-bottom: 1px solid rgba(253, 251, 248, .2);
+  transition: color .3s ease, border-color .3s ease;
+}
+
+.gc-foot-by a:hover { color: var(--gc-gold); border-bottom-color: var(--gc-gold); }
+
+.gc-foot-base a { color: inherit; text-decoration: none; }
+.gc-foot-base a:hover { color: var(--gc-gold); }
+
+/* --------------------------------------------------------- cookie notice -- */
+/* Anchored bottom-left rather than across the foot of the screen: a full-width
+   bar is a wall between the visitor and the page, and this one has nothing
+   urgent to say. */
+.gc-cookie {
+  position: fixed;
+  z-index: 250;
+  left: var(--gc-pad);
+  bottom: var(--gc-pad);
+  width: min(560px, calc(100vw - var(--gc-pad) * 2));
+  background: var(--gc-bone);
+  border: 1px solid var(--gc-hairline);
+  box-shadow: 0 18px 50px rgba(18, 16, 14, .16);
+  padding: clamp(20px, 2.6vw, 30px);
+  display: grid;
+  gap: clamp(16px, 2vw, 22px);
+  animation: gc-cookie-in .5s var(--gc-ease-soft) .6s both;
+}
+
+/* Held back briefly so it arrives after the page rather than with it. */
+@keyframes gc-cookie-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.gc-cookie-title {
+  margin: 0 0 8px;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.12rem, 1.8vw, 1.3rem);
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  color: var(--gc-oxblood);
+}
+
+.gc-cookie-text {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.94rem, 1.3vw, 1rem);
+  line-height: 1.6;
+  color: var(--gc-ink-soft);
+}
+
+.gc-cookie-text a {
+  color: var(--gc-oxblood);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gc-hairline);
+  transition: border-color .3s ease;
+}
+
+.gc-cookie-text a:hover { border-bottom-color: var(--gc-gold); }
+
+.gc-cookie-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+@media (max-width: 520px) {
+  .gc-cookie-actions .gc-btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-cookie { animation: none; }
+}
+
+/* ----------------------------------------------------------------- legal -- */
+.gc-legal { padding-top: calc(var(--gc-hdr-h) + clamp(40px, 7vw, 96px)); }
+
+.gc-legal-head,
+.gc-legal-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+}
+
+.gc-legal-rule {
+  display: block;
+  width: 52px;
+  height: 1px;
+  background: var(--gc-gold);
+  margin-bottom: clamp(18px, 2.4vw, 26px);
+}
+
+.gc-legal-title {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -.02em;
+}
+
+.gc-legal-updated {
+  margin: clamp(14px, 1.8vw, 18px) 0 0;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+}
+
+.gc-legal-body {
+  padding-top: clamp(40px, 6vw, 68px);
+  padding-bottom: clamp(60px, 8vw, 100px);
+}
+
+.gc-legal-body section + section {
+  margin-top: clamp(34px, 4.4vw, 52px);
+  padding-top: clamp(30px, 4vw, 46px);
+  border-top: 1px solid var(--gc-hairline);
+}
+
+.gc-legal-body h2 {
+  margin: 0 0 clamp(12px, 1.6vw, 16px);
+  font-family: var(--gc-serif);
+  font-weight: 500;
+  font-size: clamp(1.16rem, 1.9vw, 1.38rem);
+  line-height: 1.25;
+  letter-spacing: -.008em;
+  color: var(--gc-oxblood);
+}
+
+.gc-legal-body p,
+.gc-legal-body li {
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.4vw, 1.08rem);
+  line-height: 1.72;
+  color: var(--gc-ink-soft);
+}
+
+.gc-legal-body p { margin: 0 0 1em; }
+.gc-legal-body p:last-child { margin-bottom: 0; }
+
+.gc-legal-body strong { color: var(--gc-ink); font-weight: 500; }
+
+.gc-legal-body ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gc-legal-body li { padding-left: 18px; position: relative; }
+
+.gc-legal-body li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .82em;
+  width: 6px;
+  height: 1px;
+  background: var(--gc-gold);
+}
+
+.gc-legal-body a {
+  color: var(--gc-oxblood);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gc-hairline);
+}
+
+.gc-legal-body a:hover { border-bottom-color: var(--gc-gold); }
+
+/* --------------------------------------------------------------- gallery -- */
+.gc-gal { position: relative; }
+
+/* The whole frame is the control that opens the lightbox, so it is a button —
+   but a button that has to look like nothing at all. */
+.gc-gal-view {
+  appearance: none;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--gc-bone-2);
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+  touch-action: pan-y;
+}
+
+.gc-gal--single .gc-gal-view { cursor: zoom-in; }
+
+.gc-gal-track {
+  display: flex;
+  transition: transform 1.05s var(--gc-ease-soft);
+}
+
+.gc-gal-cell {
+  flex: 0 0 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 70vh;
+}
+
+.gc-gal-cell picture { display: contents; }
+
+.gc-gal-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Sits in the corner, dark enough to read on any frame without a scrim over
+   the whole picture. Appears on hover on a mouse; always visible on touch,
+   where there is no hover to discover it with. */
+.gc-gal-hint {
+  position: absolute;
+  right: clamp(12px, 1.6vw, 20px);
+  top: clamp(12px, 1.6vw, 20px);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  background: rgba(18, 16, 14, .62);
+  color: var(--gc-bone);
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  transition: opacity .35s ease, background .35s ease;
+}
+
+.gc-gal-hint svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (hover: hover) {
+  .gc-gal-hint { opacity: 0; }
+  .gc-gal-view:hover .gc-gal-hint,
+  .gc-gal-view:focus-visible .gc-gal-hint { opacity: 1; }
+}
+
+.gc-gal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: clamp(14px, 1.8vw, 20px);
+}
+
+.gc-gal-dots { display: flex; gap: 10px; }
+
+.gc-gal-dot {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 8px 0;
+  cursor: pointer;
+  width: 40px;
+}
+
+.gc-gal-dot i {
+  display: block;
+  height: 1px;
+  background: var(--gc-hairline);
+  transition: background .35s ease;
+}
+
+.gc-gal-dot.is-on i { background: var(--gc-gold); }
+.gc-gal-dot:hover i { background: var(--gc-oxblood); }
+
+.gc-gal-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 16px);
+}
+
+@media (max-width: 720px) {
+  .gc-gal-bar { gap: 12px; }
+  .gc-gal-nav { margin-left: auto; }
+  .gc-gal-count { display: none; }
+}
+
+.gc-gal-count {
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(11px, .95vw, 12px);
+  letter-spacing: .18em;
+  font-variant-numeric: tabular-nums;
+  color: var(--gc-ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gc-gal-count i {
+  width: 22px;
+  height: 1px;
+  background: var(--gc-hairline);
+  display: block;
+}
+
+/* -------------------------------------------------------------- lightbox -- */
+.gc-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(14, 12, 11, .94);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(14px, 2.4vw, 28px);
+  animation: gc-fade-in .3s ease both;
+}
+
+@keyframes gc-fade-in { from { opacity: 0 } to { opacity: 1 } }
+
+.gc-lightbox-stage {
+  margin: 0;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.gc-lightbox-stage picture { display: contents; }
+
+/* The point of the lightbox is the whole picture, so it is contained rather
+   than cropped — both dimensions capped, aspect kept. */
+.gc-lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.gc-lightbox-close {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 8px 2px;
+  cursor: pointer;
+  justify-self: end;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(253, 251, 248, .8);
+  transition: color .3s ease;
+}
+
+.gc-lightbox-close:hover { color: var(--gc-gold); }
+
+.gc-lightbox-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2.4vw, 28px);
+  padding-top: clamp(12px, 1.8vw, 20px);
+}
+
+.gc-lightbox-count {
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .18em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(253, 251, 248, .7);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gc-lightbox-count i {
+  width: 22px;
+  height: 1px;
+  background: rgba(253, 251, 248, .3);
+  display: block;
+}
+
+.gc-lightbox-arrow {
+  appearance: none;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: 1px solid rgba(253, 251, 248, .3);
+  color: var(--gc-bone);
+  display: grid;
+  place-items: center;
+  transition: background .3s ease, color .3s ease, border-color .3s ease;
+}
+
+.gc-lightbox-arrow:hover {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+  color: var(--gc-oxblood-deep);
+}
+
+.gc-lightbox-arrow svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gc-lightbox-arrow--prev svg { transform: scaleX(-1); }
+
+/* ----------------------------------------------------------------- pager -- */
+.gc-detail-pager {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(28px, 3.4vw, 40px) var(--gc-pad) clamp(56px, 7vw, 96px);
+  border-top: 1px solid var(--gc-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.gc-pager-btn,
+.gc-pager-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+  padding: 10px 0;
+  transition: color .35s ease;
+}
+
+.gc-pager-btn:hover,
+.gc-pager-all:hover { color: var(--gc-oxblood); }
+
+.gc-pager-btn svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .4s var(--gc-ease-soft);
+}
+
+.gc-pager-btn--prev svg { transform: scaleX(-1); }
+.gc-pager-btn:hover svg { transform: translateX(4px); }
+.gc-pager-btn--prev:hover svg { transform: scaleX(-1) translateX(4px); }
+
+/* --------------------------------------------------------------- modals -- */
+.gc-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(14, 12, 11, .72);
+  display: grid;
+  place-items: start center;
+  overflow-y: auto;
+  padding: clamp(16px, 4vw, 56px) clamp(14px, 3vw, 32px);
+  animation: gc-fade-in .3s ease both;
+}
+
+.gc-modal-close {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 6px 2px;
+  cursor: pointer;
+  align-self: end;
+  justify-self: end;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+  transition: color .3s ease;
+}
+
+.gc-modal-close:hover { color: var(--gc-oxblood); }
+
+/* ---------------------------------------------------------- enquiry form -- */
+.gc-enq-form {
+  width: min(680px, 100%);
+  background: var(--gc-bone);
+  padding: clamp(22px, 3.4vw, 44px);
+  display: grid;
+  gap: clamp(14px, 1.8vw, 20px);
+  animation: gc-modal-rise .45s var(--gc-ease-soft) both;
+}
+
+@keyframes gc-modal-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The confirmation takes the form's place inside the same dialog rather than
+   appearing under it. A thank-you below a still-filled form reads as a step
+   that might have more steps; replacing the form is what says it is over. */
+.gc-enq-done {
+  width: min(520px, 100%);
+  background: var(--gc-bone);
+  padding: clamp(34px, 5vw, 56px) clamp(24px, 4vw, 48px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: gc-modal-rise .45s var(--gc-ease-soft) both;
+}
+
+.gc-enq-done-mark {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid var(--gc-gold);
+  display: grid;
+  place-items: center;
+  margin-bottom: clamp(20px, 2.6vw, 28px);
+}
+
+.gc-enq-done-mark svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--gc-gold);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gc-enq-done-title {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+  line-height: 1.1;
+  letter-spacing: -.018em;
+  color: var(--gc-oxblood);
+}
+
+.gc-enq-done-text {
+  margin: clamp(14px, 1.8vw, 18px) 0 clamp(26px, 3.4vw, 34px);
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--gc-ink-soft);
+  max-width: 38ch;
+}
+
+@media (max-width: 599px) {
+  .gc-enq-done .gc-btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-enq-done { animation: none; }
+}
+
+.gc-enq-title {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  line-height: 1.12;
+  letter-spacing: -.016em;
+}
+
+.gc-enq-sub {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(.95rem, 1.3vw, 1.05rem);
+  line-height: 1.55;
+  color: var(--gc-ink-soft);
+  max-width: 46ch;
+}
+
+.gc-field { display: grid; gap: 7px; min-width: 0; }
+
+.gc-field-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(14px, 1.8vw, 20px);
+}
+
+@media (min-width: 560px) {
+  .gc-field-row { grid-template-columns: 1fr 1fr; }
+}
+
+.gc-field label {
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+}
+
+.gc-field-opt {
+  text-transform: none;
+  letter-spacing: .02em;
+  font-weight: 400;
+  opacity: .75;
+}
+
+.gc-field input,
+.gc-field select,
+.gc-field textarea {
+  appearance: none;
+  width: 100%;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--gc-ink);
+  background: var(--gc-bone-2);
+  border: 1px solid transparent;
+  border-radius: 0;
+  padding: 12px 14px;
+  transition: border-color .3s ease, background .3s ease;
+}
+
+.gc-field textarea { resize: vertical; }
+
+/* The UA arrow disappears with appearance:none, so it is drawn back on. */
+.gc-field select {
+  background-image: linear-gradient(45deg, transparent 50%, var(--gc-ink-soft) 50%),
+    linear-gradient(135deg, var(--gc-ink-soft) 50%, transparent 50%);
+  background-position: calc(100% - 19px) calc(50% + 1px), calc(100% - 14px) calc(50% + 1px);
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 38px;
+}
+
+.gc-field input:focus,
+.gc-field select:focus,
+.gc-field textarea:focus {
+  outline: none;
+  border-color: var(--gc-gold);
+  background: var(--gc-bone);
+}
+
+.gc-field [aria-invalid='true'] { border-color: var(--gc-oxblood); }
+
+.gc-field-err {
+  font-family: var(--gc-serif);
+  font-size: .88rem;
+  line-height: 1.4;
+  color: var(--gc-oxblood);
+}
+
+/* Radio and checkbox groups. The native control is hidden rather than styled —
+   the whole pill is the hit target, which is what makes these usable with a
+   thumb — but it stays in the DOM and keeps the keyboard and screen reader
+   behaviour that a div dressed as a radio would have to reimplement badly. */
+.gc-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+}
+
+.gc-fieldset legend {
+  padding: 0;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+}
+
+.gc-choice { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.gc-choice-opt {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  padding: 11px 18px;
+  background: var(--gc-bone-2);
+  border: 1px solid transparent;
+  font-family: var(--gc-serif);
+  font-size: .98rem;
+  color: var(--gc-ink-soft);
+  transition: background .3s ease, border-color .3s ease, color .3s ease;
+}
+
+.gc-choice-opt input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The mark is drawn on the pill, so a radio and a checkbox read the same:
+   the pill is either on or it is not. */
+.gc-choice-opt span::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 9px;
+  vertical-align: middle;
+  border: 1px solid var(--gc-ink-soft);
+  transform: rotate(45deg);
+  transition: background .3s ease, border-color .3s ease;
+}
+
+.gc-choice-opt:hover { border-color: var(--gc-hairline); }
+
+.gc-choice-opt:has(input:checked) {
+  background: var(--gc-bone);
+  border-color: var(--gc-gold);
+  color: var(--gc-ink);
+}
+
+.gc-choice-opt:has(input:checked) span::before {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+}
+
+.gc-choice-opt:has(input:focus-visible) {
+  outline: 1.5px solid var(--gc-gold);
+  outline-offset: 3px;
+}
+
+.gc-field-hint {
+  font-family: var(--gc-serif);
+  font-size: .88rem;
+  line-height: 1.4;
+  color: var(--gc-ink-soft);
+}
+
+.gc-enq-send {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: clamp(4px, 1vw, 8px);
+}
+
+.gc-btn {
+  appearance: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 14px 26px;
+  background: none;
+  border: 1px solid var(--gc-hairline);
+  color: var(--gc-oxblood);
+  transition: background .35s ease, color .35s ease, border-color .35s ease,
+    opacity .35s ease;
+}
+
+.gc-btn:hover:not(:disabled) {
+  background: var(--gc-oxblood);
+  border-color: var(--gc-oxblood);
+  color: var(--gc-bone);
+}
+
+.gc-btn--gold {
+  background: var(--gc-gold);
+  border-color: var(--gc-gold);
+  color: var(--gc-oxblood-deep);
+}
+
+.gc-btn--gold:hover:not(:disabled) {
+  background: var(--gc-oxblood);
+  border-color: var(--gc-oxblood);
+  color: var(--gc-bone);
+}
+
+.gc-btn:disabled { opacity: .55; cursor: default; }
+
+.gc-enq-note {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-size: .95rem;
+  line-height: 1.5;
+}
+
+.gc-enq-note--ok { color: var(--gc-ink-soft); }
+.gc-enq-note--bad { color: var(--gc-oxblood); }
+
+/* An inline link in a note is the same colour as the note, so it needs the
+   rule under it to read as a link at all. */
+.gc-enq-note a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-gal-track { transition: none; }
+  .gc-lightbox,
+  .gc-modal,
+  .gc-enq-form { animation: none; }
+}
+
+/* ------------------------------------------------------------------ menu -- */
+.gc-menu-sec { padding-top: clamp(56px, 7vw, 96px); }
+
+/* The one line that governs every package on the page. Set in the serif at
+   reading size and at weight 500 against the 400 of the lists below it, with
+   the gold rule to open it — enough to read as a term rather than a caption,
+   without shouting. */
+.gc-menu-note {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad) clamp(28px, 3.4vw, 40px);
+  font-family: var(--gc-serif);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.6vw, 1.26rem);
+  line-height: 1.5;
+  color: var(--gc-ink);
+}
+
+.gc-menu-note::before {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 1px;
+  background: var(--gc-gold);
+  margin-bottom: clamp(14px, 1.8vw, 20px);
+}
+
+/* The three courses as one block: hairlines top and bottom, hairlines between
+   the columns, and each course boxed by them. Extras takes the widest column
+   because it holds thirteen items to the others' three and five, and splits
+   inside that column so the block never grows taller than its longest course
+   needs. */
+.gc-menu-grid {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--gc-hairline);
+  border-bottom: 1px solid var(--gc-hairline);
+}
+
+.gc-course {
+  min-width: 0;
+  padding: clamp(26px, 3vw, 38px) var(--gc-pad);
+}
+
+.gc-course + .gc-course { border-top: 1px solid var(--gc-hairline); }
+
+@media (min-width: 820px) {
+  .gc-menu-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.8fr);
+    padding: 0 var(--gc-pad);
+  }
+
+  .gc-course {
+    padding: clamp(30px, 3.4vw, 44px) clamp(22px, 2.6vw, 38px);
+  }
+
+  .gc-course:first-child { padding-left: 0; }
+  .gc-course:last-child { padding-right: 0; }
+
+  .gc-course + .gc-course {
+    border-top: 0;
+    border-left: 1px solid var(--gc-hairline);
+  }
+}
+
+/* A heading, not a label. These name the sections of a menu, so they carry
+   more weight than the dishes under them and a rule to sit them on. */
+.gc-course-name {
+  margin: 0 0 clamp(16px, 2vw, 22px);
+  padding-bottom: clamp(10px, 1.2vw, 14px);
+  border-bottom: 1px solid var(--gc-hairline);
+  font-family: var(--gc-serif);
+  font-weight: 500;
+  font-size: clamp(1.12rem, 1.7vw, 1.3rem);
+  line-height: 1.2;
+  letter-spacing: -.008em;
+  color: var(--gc-oxblood);
+}
+
+/* auto-fill rather than a fixed count: the list works out how many columns it
+   needs from the space it is given, so this holds at every width without a
+   breakpoint per column. */
+.gc-space-list--split {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 7px clamp(18px, 2.4vw, 36px);
+  align-content: start;
+}
+
+/* --------------------------------------------------------------- floral -- */
+/* The container sits on this wrapper rather than on the list itself, because
+   the list's own rule resets margin and padding further down the file and
+   would win on source order. */
+.gc-floral-services {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+}
+
+/* --------------------------------------------------------------- drinks -- */
+/* The list beside a picture rather than across the page. Five items set full
+   width would be five short lines adrift in a lot of bone; in a column they
+   are a list, and the picture carries the space the list does not need. */
+.gc-drinks {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(36px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .gc-drinks { grid-template-columns: minmax(0, 1fr) minmax(0, .78fr); }
+}
+
+.gc-drink-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--gc-hairline);
+}
+
+/* Longer strings than the drinks, so they wrap rather than clip. */
+.gc-floral-list .gc-drink { font-size: clamp(1.14rem, 2vw, 1.45rem); }
+
+/* Set large. There are five, so each one can afford the room, and a drinks
+   list that reads at a glance across a room is the point of one. */
+.gc-drink {
+  padding: clamp(18px, 2.4vw, 28px) 0;
+  border-bottom: 1px solid var(--gc-hairline);
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.24rem, 2.4vw, 1.7rem);
+  line-height: 1.2;
+  letter-spacing: -.012em;
+  color: var(--gc-oxblood);
+}
+
+/* Clips the reveal's slight overscale so it cannot nudge the layout. */
+.gc-drinks-media { overflow: hidden; }
+.gc-drinks-media picture { display: contents; }
+
+.gc-drinks-media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  max-height: 78vh;
+  object-fit: cover;
+  display: block;
+}
+
+/* -------------------------------------------------------------- packages -- */
+/* A rule and real distance, so the packages are plainly a second thing and not
+   more menu. */
+.gc-packs {
+  margin-top: clamp(62px, 9vw, 116px);
+  padding-top: clamp(56px, 7vw, 96px);
+  border-top: 1px solid var(--gc-hairline);
+}
+
+/* Reachable by screen reader, invisible on screen. Used for the table caption,
+   which names what the columns are before they are read out. */
+.gc-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.gc-table-wrap {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--gc-pad);
+  /* Below about 360px the five columns cannot hold their type. Scrolling the
+     table rather than the page is the failure that keeps it readable. */
+  overflow-x: auto;
+}
+
+.gc-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+/* Same hairline treatment as the menu block above it, so the two read as one
+   pair of tables rather than as a table and a widget. */
+.gc-table thead th {
+  padding: 0 clamp(10px, 1.4vw, 20px) clamp(12px, 1.4vw, 16px);
+  border-bottom: 1px solid var(--gc-hairline);
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
+  white-space: nowrap;
+}
+
+.gc-table tbody td,
+.gc-table tbody th {
+  padding: clamp(18px, 2.2vw, 26px) clamp(10px, 1.4vw, 20px);
+  border-bottom: 1px solid var(--gc-hairline);
+  vertical-align: baseline;
+}
+
+/* The row's own edges sit flush with the section, so the rules line up with
+   every other rule on the page. */
+.gc-table thead th:first-child,
+.gc-table tbody th:first-child { padding-left: 0; }
+
+.gc-table thead th:last-child,
+.gc-table tbody td:last-child { padding-right: 0; }
+
+.gc-td-name {
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.24rem, 2.2vw, 1.6rem);
+  line-height: 1.15;
+  letter-spacing: -.014em;
+  color: var(--gc-oxblood);
+  white-space: nowrap;
+}
+
+.gc-td-num {
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--gc-ink);
+}
+
+.gc-table thead .gc-td-num,
+.gc-table thead .gc-td-end { text-align: right; }
+.gc-table tbody .gc-td-num,
+.gc-table tbody .gc-td-end { text-align: right; }
+
+.gc-td-price {
+  font-family: var(--gc-serif);
+  font-weight: 500;
+  font-size: clamp(1.16rem, 1.9vw, 1.4rem);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--gc-ink);
+}
+
+.gc-td-unit {
+  font-size: .78em;
+  font-weight: 400;
+  color: var(--gc-ink-soft);
+}
+
+@media (max-width: 620px) {
+  .gc-table thead th { font-size: 9.5px; letter-spacing: .08em; }
+  .gc-table thead th,
+  .gc-table tbody td,
+  .gc-table tbody th { padding-left: 8px; padding-right: 8px; }
+}
+
+.gc-course-cta {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(44px, 6vw, 76px) var(--gc-pad) clamp(70px, 9vw, 110px);
+}
+

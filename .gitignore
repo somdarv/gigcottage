@@ -11,6 +11,8 @@
 
 # next.js
 /.next/
+# Where NEXT_DIST_DIR verification builds land (see next.config.mjs).
+/.next-verify/
 /out/
 
 # production

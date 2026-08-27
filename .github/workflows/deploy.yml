@@ -36,6 +36,14 @@ jobs:
             git reset --hard origin/main
             git gc --prune=now --quiet || true
             npm ci --include=dev --no-audit --no-fund
+            # .next is gitignored, so `git reset --hard` leaves the previous
+            # build output in place and the next build reuses it. If a build
+            # was ever killed part-way — LVE limits, the memory cap above, or a
+            # cancelled workflow run — that leftover mixes with the new output
+            # and webpack-runtime ends up requiring vendor chunks that no
+            # longer exist. It builds fine and then 500s on every request.
+            # Wipe the output, keep .next/cache so builds stay within timeout.
+            find .next -mindepth 1 -maxdepth 1 ! -name cache -exec rm -rf {} + 2>/dev/null || true
             npm run build
             npm prune --omit=dev
             mkdir -p tmp && touch tmp/restart.txt
