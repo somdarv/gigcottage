@@ -152,12 +152,30 @@ export const beveragesGlass = picture(
   1400,
 )
 
-// The banner on /floral. Stock, and the right kind for a banner: an all-over
-// bed of flowers with no single subject, so every crop the box asks for still
-// works. Their own arrangement is further down the page, at a size it holds.
+// The banner on /floral. Theirs now, not stock — a bridal bouquet they made,
+// sent 2026-08-28. The stock bed of flowers it replaces is gone.
+//
+// SOFT ON DESKTOP, KNOWINGLY. The source is 540x960: a WhatsApp-compressed
+// phone frame, and WhatsApp is where the compression happened, not the camera.
+// A full-bleed banner on a 1920px screen wants about 3.5x that width, so the
+// 1080 tier here is a 2x Lanczos upscale and the browser stretches it further
+// again. Baby's breath is the worst subject there is for that — it is all
+// high-frequency detail, and upscaling turns it to porridge.
+//
+// It is shipped anyway because a real bouquet of theirs beats a stock bed of
+// gerberas, which is the whole point the client has been making. Ask them for
+// the original off the phone (it will be 3000px+) and regenerate these four
+// files at the shared ladder; nothing else has to change.
+//
+// Cropped square, at 540x540 off the middle: the page hero is full bleed and
+// object-fit covers it, so a square sits between what a phone crops to
+// (portrait) and what a desktop crops to (a wide band) without losing the
+// bouquet at either end.
 export const floralBanner = picture(
-  'floral-banner',
-  'A dense bed of gerberas, roses and white chrysanthemums',
+  'floral-bouquet',
+  'A bridal bouquet of white roses and baby\'s breath, tied with green ribbon',
+  Infinity,
+  { avif: [540, 1080], webp: [540, 1080] },
 )
 
 // The venue's own arrangement, photographed by them and sent 2026-08-27. The
