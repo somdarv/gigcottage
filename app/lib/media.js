@@ -127,14 +127,6 @@ export const spaceGallery = (slug) => SPACE_PICTURES[slug] || []
 // The one that represents the space wherever only one will fit.
 export const spaceImage = (slug) => SPACE_PICTURES[slug][0]
 
-// The banner on /facilities. Its own entry rather than borrowing a space's
-// picture: it is a mood shot of the grounds, and pointing it at a slug meant it
-// silently became an interior the moment that slug got real photography.
-export const facilitiesBanner = picture(
-  'palm-walk',
-  'A grass walk lined with palms at Gig Cottage, Malejor',
-)
-
 // The banner on /catering. Same source as the Executive Hall's picture, cropped
 // tight on the laid tables so it reads as the meal rather than as the room —
 // reusing a frame is only cheap when it is the same frame. Source crop is

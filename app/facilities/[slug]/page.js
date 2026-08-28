@@ -54,7 +54,9 @@ export default function FacilityPage({ params }) {
           </Link>
 
           <h1 className="gc-detail-name">{space.name}</h1>
-          <p className="gc-detail-note">{space.note}</p>
+          {/* The client's own line where a space has one, the listing
+              description where it does not. */}
+          <p className="gc-detail-note">{space.lead || space.note}</p>
         </div>
 
         <div className="gc-detail-media">

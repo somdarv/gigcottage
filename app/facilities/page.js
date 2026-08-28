@@ -1,48 +1,29 @@
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 import Facilities from '../components/Facilities'
-import { facilitiesBanner } from '../lib/media'
 
-// The facilities index. It opens the way a lodge page opens on singita.com — a
-// picture edge to edge with the name written on it — and only then hands over
-// to the rail, which is contained. Full bleed then framed is the rhythm; two
-// full-bleed blocks in a row would read as one long banner.
+// The facilities index. It used to open on a full-bleed photograph with the
+// name written across it; the client took that off (2026-08-28), so the page
+// opens on the name alone, on bone, and hands straight over to the rail. The
+// rail is the page — the banner was a fifth picture competing with four.
 
 export const metadata = {
   title: 'Facilities | Gig Cottage',
   description:
-    'Four event spaces at Malejor on the Adenta-Dodowa Road: a garden for 2,000 guests, a large naturally ventilated auditorium, an air-conditioned executive hall and an open terrace.',
+    'Four event spaces at Malejor on the Adenta-Dodowa Road: a garden for 2000 guests, a large naturally ventilated auditorium, an air-conditioned executive hall and an open terrace.',
 }
 
 export default function FacilitiesPage() {
-  const opening = facilitiesBanner
-
   return (
     <>
       <SiteHeader />
 
       <main>
-        <header className="gc-page-hero">
-          <picture>
-            <source type="image/avif" srcSet={opening.avifSrcSet} sizes="100vw" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={opening.src}
-              srcSet={opening.srcSet}
-              sizes="100vw"
-              alt={opening.alt}
-              fetchPriority="high"
-              decoding="async"
-            />
-          </picture>
-
-          {/* Centred, not written into the bottom-left corner. The rail
-              below inscribes every slide bottom-left, and a page header that
-              did the same read as one more slide rather than as the way in. */}
-          <div className="gc-page-hero-cap">
-            <h1 className="gc-page-hero-name">Facilities</h1>
-            <span className="gc-page-hero-rule" aria-hidden="true" />
-          </div>
+        {/* Centred, and on bone. The same scale and the same gold full stop
+            the banner version had — only the photograph is gone. */}
+        <header className="gc-page-head">
+          <h1 className="gc-page-head-name">Facilities</h1>
+          <span className="gc-page-head-rule" aria-hidden="true" />
         </header>
 
         <Facilities />

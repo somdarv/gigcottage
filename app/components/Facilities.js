@@ -170,15 +170,17 @@ export default function Facilities() {
                   <figcaption className="gc-slide-cap">
                     <span className="gc-slide-rule" aria-hidden="true" />
                     <h3 className="gc-slide-name">{space.name}</h3>
-                    <p className="gc-slide-note">
-                      {space.guests} guests. {space.note}
-                    </p>
+                    {/* The figure stands on its own line rather than opening
+                        the sentence — the client's instruction, and it is the
+                        one thing on the slide anyone is scanning for. */}
+                    <p className="gc-slide-figure">{space.guests} guests</p>
+                    <p className="gc-slide-note">{space.note}</p>
                     <Link
                       className="gc-slide-cta"
                       href={spacePath(space)}
                       tabIndex={on ? undefined : -1}
                     >
-                      Learn more
+                      View details
                       <Chevron />
                     </Link>
                   </figcaption>

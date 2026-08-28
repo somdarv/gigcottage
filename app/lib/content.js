@@ -8,6 +8,10 @@
 // (2026-08-28). The number is unchanged and still the rate card's; only the
 // word above it moved, so `guests` is what the field is called too.
 //
+// And no thousands comma on any of them, hers too: 2000, not 2,000. The
+// figures are strings for that reason — nothing formats them, so nothing can
+// put the comma back.
+//
 // NO FACILITY PRICES. The rate cards carry them; the site deliberately does
 // not, at any depth. There is no `rate` field on a space to render by accident
 // — hire is quoted through an enquiry.
@@ -53,14 +57,18 @@ export const SPACES = [
   {
     slug: 'garden',
     name: 'Garden',
-    guests: '2,000',
-    note: 'Open lawn, mown flat, palms around the edge and outdoor mist fans through it.',
+    guests: '2000',
+    note: 'Well maintained garden space with outdoor mist fans.',
+    // A space opens its own page on `lead` where it has one, and on `note`
+    // where it does not. The garden's is the client's line, and it is a
+    // headline rather than a description — which is what she asked for.
+    lead: 'Outdoor events just got better with our natural lawns.',
     included: [
       'Expansive landscaped garden',
       'Beautiful trees and greenery',
       'Outdoor mist fans',
       'Spacious enclosed parking',
-      'Generator backup',
+      'Backup generator',
       'Security',
     ],
     suitedFor: [
@@ -77,13 +85,14 @@ export const SPACES = [
     slug: 'auditorium',
     name: 'Large Auditorium',
     shortName: 'Auditorium',
-    guests: '1,000',
+    guests: '1000',
     note: 'Large naturally ventilated auditorium. Comfortable airflow with no air conditioning required.',
     included: [
       'Large naturally ventilated auditorium',
       'Indoor fans',
       'Comfortable airflow, no air conditioning required',
       'Spacious enclosed parking',
+      'Backup generator',
     ],
     suitedFor: [
       'Weddings',
@@ -106,7 +115,7 @@ export const SPACES = [
       'Private washrooms',
       'Enclosed indoor venue',
       'Spacious parking',
-      'Generator backup',
+      'Backup generator',
       'Security',
     ],
     suitedFor: [
@@ -128,6 +137,7 @@ export const SPACES = [
       'Scenic view of the garden',
       'Outdoor mist fans',
       'Access to spacious parking',
+      'Backup generator',
     ],
     suitedFor: [
       'Cocktail events',

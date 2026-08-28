@@ -1164,6 +1164,40 @@ html { scroll-behavior: smooth; }
   max-width: 20ch;
 }
 
+/* ------------------------------------------------------- page head, plain -- */
+/* /facilities opens on this instead of a photograph — the client took the
+   banner off (2026-08-28). It keeps the banner version's scale and its gold
+   full stop, so the page still arrives on a title rather than starting halfway
+   into the rail; it just does it on bone, in ink. The bar above is opaque from
+   the first pixel, so the padding only has to clear its height. */
+.gc-page-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: calc(var(--gc-hdr-h) + clamp(54px, 8vw, 108px)) var(--gc-pad) 0;
+  color: var(--gc-oxblood);
+}
+
+.gc-page-head-name {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  line-height: 1;
+  letter-spacing: -.022em;
+}
+
+/* Under the name, not over it — a full stop rather than an eyebrow, the same
+   way the banner version had it. */
+.gc-page-head-rule {
+  width: 64px;
+  height: 1px;
+  background: var(--gc-gold);
+  margin-top: clamp(20px, 2.6vw, 30px);
+  opacity: .9;
+}
+
 /* ------------------------------------------------------------- page hero -- */
 /* The opening frame on an inner page. Full bleed, unlike the rail below it —
    the page arrives wide and then narrows into the framed content, which is the
@@ -1386,8 +1420,23 @@ html { scroll-behavior: smooth; }
   max-width: 16ch;
 }
 
+/* The capacity, on a line of its own above the description. Set in the sans
+   at label scale against the serif under it: it is a figure being scanned for,
+   not a sentence being read, and tabular numerals keep the four slides'
+   digits from shuffling as the rail moves. */
+.gc-slide-figure {
+  margin: clamp(12px, 1.4vw, 16px) 0 0;
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 600;
+  font-size: clamp(11px, 1.1vw, 13px);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: rgba(253, 251, 248, .92);
+}
+
 .gc-slide-note {
-  margin: .6em 0 0;
+  margin: .5em 0 0;
   font-family: var(--gc-serif);
   font-weight: 400;
   font-size: clamp(.98rem, 1.4vw, 1.14rem);
