@@ -54,7 +54,7 @@ export const SPACES = [
     slug: 'garden',
     name: 'Garden',
     guests: '2,000',
-    note: 'A level open lawn, walled on every side and edged with palms, cooled by outdoor mist fans.',
+    note: 'Open lawn, mown flat, palms around the edge and outdoor mist fans through it.',
     included: [
       'Expansive landscaped garden',
       'Beautiful trees and greenery',
