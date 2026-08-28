@@ -22,7 +22,7 @@ export function generateMetadata({ params }) {
   if (!space) return {}
   return {
     title: `${space.name} | Gig Cottage`,
-    description: `${space.note} Seats ${space.seated} at Malejor on the Adenta-Dodowa Road.`,
+    description: `${space.note} ${space.guests} guests at Malejor on the Adenta-Dodowa Road.`,
   }
 }
 
@@ -66,8 +66,8 @@ export default function FacilityPage({ params }) {
             {/* dt before dd is what the spec allows; column-reverse puts the
                 figure above its label visually. */}
             <div>
-              <dt className="gc-label">Seated</dt>
-              <dd className="gc-figure">{space.seated}</dd>
+              <dt className="gc-label">Guests</dt>
+              <dd className="gc-figure">{space.guests}</dd>
             </div>
           </dl>
 

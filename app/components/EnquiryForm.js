@@ -327,7 +327,7 @@ export default function EnquiryForm({ space }) {
                   type="number"
                   inputMode="numeric"
                   min="1"
-                  placeholder={space.seated.replace(/,/g, '')}
+                  placeholder={space.guests.replace(/,/g, '')}
                   value={form.guests}
                   onChange={set('guests')}
                 />

@@ -171,7 +171,7 @@ export default function Facilities() {
                     <span className="gc-slide-rule" aria-hidden="true" />
                     <h3 className="gc-slide-name">{space.name}</h3>
                     <p className="gc-slide-note">
-                      Seats {space.seated}. {space.note}
+                      {space.guests} guests. {space.note}
                     </p>
                     <Link
                       className="gc-slide-cta"
@@ -237,7 +237,7 @@ export default function Facilities() {
             <Link className="gc-fac-row" href={spacePath(space)}>
               <span className="gc-fac-name">{space.name}</span>
               <span className="gc-fac-note">{space.note}</span>
-              <span className="gc-fac-seated">{space.seated} seated</span>
+              <span className="gc-fac-guests">{space.guests} guests</span>
               <span className="gc-fac-go" aria-hidden="true">
                 <Chevron />
               </span>

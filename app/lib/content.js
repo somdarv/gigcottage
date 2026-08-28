@@ -1,8 +1,12 @@
 // Facility and contact facts, in one place so a change is one edit.
 //
 // Everything here is transcribed from the client's own facility rate cards:
-// capacities are seated (theatre) throughout, and the inclusions and "suited
+// the figures are seated (theatre) capacities, and the inclusions and "suited
 // for" lists are their wording, not ours. Nothing is invented.
+//
+// The site calls them GUESTS, not seated — the client's instruction
+// (2026-08-28). The number is unchanged and still the rate card's; only the
+// word above it moved, so `guests` is what the field is called too.
 //
 // NO FACILITY PRICES. The rate cards carry them; the site deliberately does
 // not, at any depth. There is no `rate` field on a space to render by accident
@@ -49,8 +53,8 @@ export const SPACES = [
   {
     slug: 'garden',
     name: 'Garden',
-    seated: '2,000',
-    note: 'Expansive landscaped garden with beautiful trees and greenery, cooled by outdoor mist fans.',
+    guests: '2,000',
+    note: 'A level open lawn, walled on every side and edged with palms, cooled by outdoor mist fans.',
     included: [
       'Expansive landscaped garden',
       'Beautiful trees and greenery',
@@ -73,7 +77,7 @@ export const SPACES = [
     slug: 'auditorium',
     name: 'Large Auditorium',
     shortName: 'Auditorium',
-    seated: '1,000',
+    guests: '1,000',
     note: 'Large naturally ventilated auditorium. Comfortable airflow with no air conditioning required.',
     included: [
       'Large naturally ventilated auditorium',
@@ -95,7 +99,7 @@ export const SPACES = [
   {
     slug: 'executive-hall',
     name: 'Executive Hall',
-    seated: '120',
+    guests: '120',
     note: 'Fully air-conditioned and enclosed, with private washrooms.',
     included: [
       'Fully air-conditioned hall',
@@ -117,7 +121,7 @@ export const SPACES = [
   {
     slug: 'terrace',
     name: 'Terrace',
-    seated: '100',
+    guests: '100',
     note: 'Beautiful open-air terrace with a scenic view of the garden.',
     included: [
       'Beautiful open-air terrace',
@@ -259,7 +263,7 @@ export function spacePath(space) {
 
 export function spaceEnquiry(space) {
   return whatsappLink(
-    `Hello Gig Cottage, I would like to enquire about hiring the ${space.name} (${space.seated} seated).`,
+    `Hello Gig Cottage, I would like to enquire about hiring the ${space.name} (${space.guests} guests).`,
   )
 }
 

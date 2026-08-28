@@ -1,15 +1,14 @@
 import SiteHeader from '../components/SiteHeader'
 import SiteFooter from '../components/SiteFooter'
 import { FLORAL, whatsappLink } from '../lib/content'
-import { floralBanner } from '../lib/media'
+import { floralBanner, floralWork } from '../lib/media'
 
 // Floral.
 //
-// The v1 build's own photograph of an arrangement was here and has been pulled:
-// it was a phone snapshot on an office table, with a chair and floor tiles in
-// shot, and at page scale that showed. Real beats stock only while the real one
-// holds up. If a proper photograph of their work turns up, this is where it
-// goes — beside the list, contained, at whatever size it is actually sharp at.
+// Their own photograph of an arrangement is back (2026-08-28), cropped past
+// the chair and the floor tiles that got the v1 version pulled. It sits beside
+// the list, contained, at the width the source is actually sharp at — the note
+// on floralWork in lib/media.js has the arithmetic.
 
 export const metadata = {
   title: 'Floral | Gig Cottage',
@@ -64,6 +63,30 @@ export default function FloralPage() {
                 </li>
               ))}
             </ul>
+
+            {/* Theirs, and the one picture on the site that is genuinely of
+                Gig Cottage. */}
+            <figure className="gc-floral-media">
+              <div className="gc-floral-frame" data-gc-reveal="media">
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet={floralWork.avifSrcSet}
+                    sizes="(min-width: 900px) 42vw, 100vw"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={floralWork.src}
+                    srcSet={floralWork.srcSet}
+                    sizes="(min-width: 900px) 42vw, 100vw"
+                    alt={floralWork.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
+              </div>
+              <figcaption>Arranged at Gig Cottage</figcaption>
+            </figure>
           </div>
 
           <div className="gc-course-cta">

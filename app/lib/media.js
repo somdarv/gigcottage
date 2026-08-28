@@ -160,17 +160,29 @@ export const beveragesGlass = picture(
   1400,
 )
 
-// The venue's own floral work, recovered from the v1 build. The only genuine
-// Gig Cottage photograph on the site — everything else is stock standing in.
-//
-// It is 1280px at 4:3 and shown contained rather than full bleed for exactly
-// that reason: at native size it is sharp, and a full-viewport banner would
-// both upscale it and crop the arrangement out of its own picture.
-// Stock, and the right kind for a banner: an all-over bed of flowers with no
-// single subject, so every crop the box asks for still works.
+// The banner on /floral. Stock, and the right kind for a banner: an all-over
+// bed of flowers with no single subject, so every crop the box asks for still
+// works. Their own arrangement is further down the page, at a size it holds.
 export const floralBanner = picture(
   'floral-banner',
   'A dense bed of gerberas, roses and white chrysanthemums',
+)
+
+// The venue's own arrangement, photographed by them and sent 2026-08-27. The
+// only genuine Gig Cottage photograph on the site — everything else here is
+// stock standing in.
+//
+// Cropped hard, and that is the whole story of it. The source is a 1280px
+// phone frame with a yellow chair, floor tiles and a set of car keys around
+// the edges — which is why the v1 build's version of this picture was pulled
+// rather than shown. What survives the crop is 740px of arrangement, so it is
+// contained beside the list instead of run full bleed: at that width it is
+// sharp, and a banner would upscale it half again to prove it was not.
+export const floralWork = picture(
+  'floral-work',
+  'An arrangement of red ginger, white and pink roses in a basket, ringed with broad glossy leaves',
+  Infinity,
+  { avif: [480, 740], webp: [480, 740] },
 )
 
 // The mark itself, used full size by the intro and small in the header bar.

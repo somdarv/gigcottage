@@ -49,7 +49,7 @@ export default function FacilityCards() {
                   </picture>
                 </span>
 
-                <span className="gc-card-meta">Seats {space.seated}</span>
+                <span className="gc-card-meta">{space.guests} guests</span>
                 <span className="gc-card-name">{space.name}</span>
               </Link>
             </li>

@@ -57,9 +57,9 @@ body {
   text-transform: uppercase;
 }
 
-/* Labels that genuinely carry information (Seated, Rate, column headings) keep
-   their words but not the letterspaced-caps treatment. Set in the serif at
-   reading size, so they read as part of the text rather than above it. */
+/* Labels that genuinely carry information (Guests, list headings) keep their
+   words but not the letterspaced-caps treatment. Set in the serif at reading
+   size, so they read as part of the text rather than above it. */
 .gc-label {
   font-family: var(--gc-serif);
   font-weight: 400;
@@ -1570,7 +1570,7 @@ html { scroll-behavior: smooth; }
   grid-column: 1 / -1;
 }
 
-.gc-fac-seated {
+.gc-fac-guests {
   font-family: var(--font-montserrat), var(--gc-sans);
   font-weight: 500;
   font-size: clamp(12px, 1.15vw, 14px);
@@ -1590,7 +1590,7 @@ html { scroll-behavior: smooth; }
 
 @media (min-width: 900px) {
   .gc-fac-note { grid-column: auto; }
-  .gc-fac-seated { grid-row: auto; grid-column: auto; }
+  .gc-fac-guests { grid-row: auto; grid-column: auto; }
   .gc-fac-go { display: grid; place-items: center; }
 }
 
@@ -2836,11 +2836,51 @@ html { scroll-behavior: smooth; }
 /* --------------------------------------------------------------- floral -- */
 /* The container sits on this wrapper rather than on the list itself, because
    the list's own rule resets margin and padding further down the file and
-   would win on source order. */
+   would win on source order.
+   The grid is the drinks page's, for the same reason it is there: a short
+   list set full width is a few lines adrift in a lot of bone, and the picture
+   carries the room the list does not need. */
 .gc-floral-services {
   max-width: 1320px;
   margin: 0 auto;
   padding: 0 var(--gc-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(36px, 5vw, 64px);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .gc-floral-services { grid-template-columns: minmax(0, 1fr) minmax(0, .78fr); }
+}
+
+/* Landscape, where the drinks glass is portrait: the arrangement is wider
+   than it is tall, and squaring it up would take the leaves off both ends. */
+.gc-floral-media { margin: 0; }
+
+/* The clip the reveal's overscale needs, on the picture alone — the caption
+   under it should not be swept along with it. */
+.gc-floral-frame { overflow: hidden; }
+.gc-floral-media picture { display: contents; }
+
+.gc-floral-media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+}
+
+/* Said quietly, and only because it is worth saying: everything else on the
+   site is stock, and this one is not. */
+.gc-floral-media figcaption {
+  margin-top: 14px;
+  font-family: var(--gc-sans);
+  font-size: clamp(9.5px, 1.05vw, 11px);
+  font-weight: 600;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gc-ink-soft);
 }
 
 /* --------------------------------------------------------------- drinks -- */

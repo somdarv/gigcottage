@@ -156,10 +156,10 @@ export default function Hero() {
 
       <div className="gc-hero-mid">
         <h1 className="gc-thesis gc-rise gc-d3">
-          Room for the whole guest list, indoors or out.
+          Room for the whole guest list, on a lawn walled all the way round.
         </h1>
         <p className="gc-hero-sub gc-rise gc-d4">
-          Up to 2,000 seated across four spaces. Weddings, concerts, church
+          Up to 2,000 guests across four spaces. Weddings, concerts, church
           programmes and conferences.
         </p>
         <a

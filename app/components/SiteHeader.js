@@ -137,7 +137,7 @@ export default function SiteHeader() {
             <li key={space.slug}>
               <Link href={spacePath(space)} onClick={() => setMenuOpen(false)}>
                 <span className="gc-menu-name">{space.name}</span>
-                <span className="gc-menu-cap">{space.seated} seated</span>
+                <span className="gc-menu-cap">{space.guests} guests</span>
               </Link>
             </li>
           ))}
