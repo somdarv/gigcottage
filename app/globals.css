@@ -47,8 +47,9 @@ body {
   color: var(--gc-ink);
 }
 
-/* Reserved for the hero foot, which is a row of names and a scroll cue, not a
-   label above content. Section eyebrows are not part of this design. */
+/* The hero foot's row of names and its scroll cue. Sections still get no
+   eyebrows — the one line that sits above content is the hero's standing line,
+   and it has a treatment of its own in .gc-hero-mark. */
 .gc-eyebrow {
   font-family: var(--gc-sans);
   font-weight: 400;
@@ -336,6 +337,36 @@ body {
 }
 
 .gc-hero-mid > * { pointer-events: auto; }
+
+/* The client's standing line, above the headline (2026-08-28). Set larger and
+   heavier than any other label on the site because that is the point of it —
+   at the 11px the rest of the caps use it would have read as a caption. Bone
+   rather than gold: gold at this size loses to the photograph underneath,
+   which is the same reason the headline is weight 500. The rule carries the
+   gold instead, and stops the line reading as stray type over the picture. */
+.gc-hero-mark {
+  margin: 0 0 clamp(15px, 2vw, 22px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(11px, 1.5vw, 17px);
+  font-family: var(--gc-sans);
+  font-weight: 600;
+  font-size: clamp(12px, 1.25vw, 15px);
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: #fefdfb;
+}
+
+.gc-hero-mark-rule {
+  width: clamp(32px, 4vw, 52px);
+  height: 1px;
+  background: var(--gc-gold);
+}
+
+/* Letterspacing leaves its space after the last letter too, which drags the
+   centred line half a space left. This puts it back. */
+.gc-hero-mark-text { padding-left: .34em; }
 
 .gc-thesis {
   margin: 0;
