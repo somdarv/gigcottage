@@ -83,7 +83,7 @@ export default function FacilityPage({ params }) {
 
             {space.suitedFor.length > 0 && (
               <div>
-                <p className="gc-label gc-list-label">Suited to</p>
+                <p className="gc-label gc-list-label">Suited for</p>
                 <ul className="gc-space-list">
                   {space.suitedFor.map((item) => (
                     <li key={item}>{item}</li>

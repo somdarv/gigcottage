@@ -112,17 +112,6 @@ export default function Facilities() {
 
   return (
     <section className="gc-fac" id="facilities">
-      <header className="gc-sec-head gc-sec-head--split">
-        <h2 className="gc-sec-title" data-gc-reveal>
-          From a hundred guests to two thousand.
-        </h2>
-        <p className="gc-sec-lead" data-gc-reveal>
-          A garden, a naturally ventilated auditorium, an air-conditioned hall
-          and an open terrace — four spaces on one property at Malejor, with
-          standby generator, security and enclosed parking across all of them.
-        </p>
-      </header>
-
       <div
         className="gc-rail"
         ref={railRef}

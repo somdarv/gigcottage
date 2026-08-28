@@ -11,7 +11,7 @@ import { facilitiesBanner } from '../lib/media'
 export const metadata = {
   title: 'Facilities | Gig Cottage',
   description:
-    'Four event spaces at Malejor on the Adenta-Dodowa Road: a garden seating 2,000, an eco-friendly large auditorium, an air-conditioned mini hall and an open terrace.',
+    'Four event spaces at Malejor on the Adenta-Dodowa Road: a garden seating 2,000, a large naturally ventilated auditorium, an air-conditioned executive hall and an open terrace.',
 }
 
 export default function FacilitiesPage() {

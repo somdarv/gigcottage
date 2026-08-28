@@ -20,6 +20,19 @@ const nextConfig = {
     workerThreads: false,
   },
 
+  // The Mini Hall became the Executive Hall (2026-08-28) and took its URL
+  // with it. Anything already pointing at the old path — a WhatsApp
+  // message, a search result — still lands on the page.
+  async redirects() {
+    return [
+      {
+        source: '/facilities/mini-hall',
+        destination: '/facilities/executive-hall',
+        permanent: true,
+      },
+    ];
+  },
+
   // Next serves /public with no-cache by default, so every repeat visit
   // re-fetches the hero. These filenames carry their own width and codec, so a
   // changed asset is always a new URL and a long immutable cache is safe.

@@ -5,15 +5,14 @@ import { cateringBanner } from '../lib/media'
 
 // Catering.
 //
-// The menu comes first and the packages after it. A package is a count —
-// "two starters, four mains, six extras" — and a count means nothing until you
-// know what there is to count. Read the dishes, then choose how much of the
-// table to fill.
+// The menu and nothing else. The five packages and their per-head prices came
+// off at the client's request (2026-08-28), so the page is the food and one
+// way to ask about it — what a spread costs is a conversation now.
 
 export const metadata = {
   title: 'Catering | Gig Cottage',
   description:
-    'Buffet catering at Gig Cottage, Malejor. Goat stew, palava sauce, grilled tilapia, waakye and jollof, in five packages from a taste to a feast.',
+    'Buffet catering at Gig Cottage, Malejor. Goat stew, palava sauce, light soup, grilled tilapia, waakye and jollof, served with green sauce, shito and Ghanaian salad.',
 }
 
 export default function CateringPage() {
@@ -51,7 +50,7 @@ export default function CateringPage() {
             </h2>
           </div>
 
-          {/* Set apart and set bold: it applies to every package on the page,
+          {/* Set apart and set bold: it applies to every buffet on the page,
               so it is not a caption under the menu, it is a term of it. */}
           <p className="gc-menu-note" data-gc-reveal>{CATERING.note}</p>
 
@@ -72,59 +71,9 @@ export default function CateringPage() {
               </div>
             ))}
           </div>
-        </section>
 
-        <section className="gc-packs" aria-labelledby="gc-packs-title">
-          <div className="gc-sec-head gc-sec-head--split">
-            <h2 className="gc-sec-title" id="gc-packs-title" data-gc-reveal>
-              Packages
-            </h2>
-            <p className="gc-sec-lead" data-gc-reveal>
-              Every package comes from the same kitchen — the difference is how
-              much of the table it fills. Choose your dishes from the menu
-              above, then the package that holds them.
-            </p>
-          </div>
-
-          {/* A table, because this is tabular: five packages measured on the
-              same three counts and a price. Cards made you compare by moving
-              your eye between boxes; a column lets you read straight down. */}
-          <div className="gc-table-wrap" data-gc-reveal>
-            <table className="gc-table">
-              <caption className="gc-sr-only">
-                Catering packages, with the number of starters, mains and extras
-                in each, and the price.
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">Package</th>
-                  <th scope="col" className="gc-td-num">Starters</th>
-                  <th scope="col" className="gc-td-num">Mains</th>
-                  <th scope="col" className="gc-td-num">Extras</th>
-                  <th scope="col" className="gc-td-end">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {CATERING.packages.map((pack) => (
-                  <tr key={pack.name}>
-                    <th scope="row" className="gc-td-name">
-                      {pack.name}
-                    </th>
-                    <td className="gc-td-num">{pack.starters}</td>
-                    <td className="gc-td-num">{pack.mains}</td>
-                    <td className="gc-td-num">{pack.extras}</td>
-                    <td className="gc-td-end gc-td-price">
-                      {pack.price}
-                      {CATERING.priceUnit && (
-                        <span className="gc-td-unit"> {CATERING.priceUnit}</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
+          {/* The one call to action on the page, and it belongs to the menu
+              now that the packages table is gone. */}
           <div className="gc-course-cta">
             <a
               className="gc-space-cta"

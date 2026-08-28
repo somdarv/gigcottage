@@ -158,6 +158,20 @@ body {
   gap: clamp(16px, 2.4vw, 34px);
 }
 
+/* The pair reads as one thing, so they sit closer to each other than the
+   header's own gap would put them. */
+.gc-hdr-phones {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(10px, 1.3vw, 18px);
+}
+
+/* Below this the second number, the first and the Enquire button stop
+   fitting beside a centred wordmark. The menu carries both. */
+@media (max-width: 1024px) {
+  .gc-phone--alt { display: none; }
+}
+
 .gc-rules { display: inline-flex; flex-direction: column; gap: 4px; width: 20px; }
 .gc-rules i { display: block; height: 1px; background: currentColor; transition: transform .4s ease; }
 .gc-hdr-btn:hover .gc-rules i:first-child { transform: translateX(4px); }
@@ -735,7 +749,6 @@ html { scroll-behavior: smooth; }
 .gc-find,
 .gc-fac,
 .gc-menu-sec,
-.gc-packs,
 .gc-foot {
   scroll-margin-top: calc(var(--gc-hdr-h) + 20px);
 }
@@ -1202,7 +1215,10 @@ html { scroll-behavior: smooth; }
 }
 
 /* ------------------------------------------------------------ facilities -- */
-.gc-fac { padding-top: clamp(60px, 8vw, 104px); }
+/* The heading and lead that used to sit here came off at the client's
+   request, and their padding went with them — so the section carries the
+   distance from the banner now. */
+.gc-fac { padding-top: clamp(76px, 10vw, 140px); }
 
 /* Contained, never full bleed. The bone margin either side is doing real work:
    it frames the picture as one considered object instead of letting it run to
@@ -1723,7 +1739,7 @@ html { scroll-behavior: smooth; }
   .gc-space-lists { grid-template-columns: 1fr 1fr; }
 }
 
-/* Stacked, the default gap left "Suited to" reading as a continuation of the
+/* Stacked, the default gap left "Suited for" reading as a continuation of the
    inclusions above it — two bulleted lists in the same type with a small gap
    is one long list. A rule and real space make them two blocks. */
 @media (max-width: 559px) {
@@ -2729,7 +2745,7 @@ html { scroll-behavior: smooth; }
 /* ------------------------------------------------------------------ menu -- */
 .gc-menu-sec { padding-top: clamp(56px, 7vw, 96px); }
 
-/* The one line that governs every package on the page. Set in the serif at
+/* The one line that governs every buffet on the page. Set in the serif at
    reading size and at weight 500 against the 400 of the lists below it, with
    the gold rule to open it — enough to read as a term rather than a caption,
    without shouting. */
@@ -2879,119 +2895,6 @@ html { scroll-behavior: smooth; }
   max-height: 78vh;
   object-fit: cover;
   display: block;
-}
-
-/* -------------------------------------------------------------- packages -- */
-/* A rule and real distance, so the packages are plainly a second thing and not
-   more menu. */
-.gc-packs {
-  margin-top: clamp(62px, 9vw, 116px);
-  padding-top: clamp(56px, 7vw, 96px);
-  border-top: 1px solid var(--gc-hairline);
-}
-
-/* Reachable by screen reader, invisible on screen. Used for the table caption,
-   which names what the columns are before they are read out. */
-.gc-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.gc-table-wrap {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 var(--gc-pad);
-  /* Below about 360px the five columns cannot hold their type. Scrolling the
-     table rather than the page is the failure that keeps it readable. */
-  overflow-x: auto;
-}
-
-.gc-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-/* Same hairline treatment as the menu block above it, so the two read as one
-   pair of tables rather than as a table and a widget. */
-.gc-table thead th {
-  padding: 0 clamp(10px, 1.4vw, 20px) clamp(12px, 1.4vw, 16px);
-  border-bottom: 1px solid var(--gc-hairline);
-  font-family: var(--font-montserrat), var(--gc-sans);
-  font-weight: 500;
-  font-size: 10.5px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--gc-ink-soft);
-  white-space: nowrap;
-}
-
-.gc-table tbody td,
-.gc-table tbody th {
-  padding: clamp(18px, 2.2vw, 26px) clamp(10px, 1.4vw, 20px);
-  border-bottom: 1px solid var(--gc-hairline);
-  vertical-align: baseline;
-}
-
-/* The row's own edges sit flush with the section, so the rules line up with
-   every other rule on the page. */
-.gc-table thead th:first-child,
-.gc-table tbody th:first-child { padding-left: 0; }
-
-.gc-table thead th:last-child,
-.gc-table tbody td:last-child { padding-right: 0; }
-
-.gc-td-name {
-  font-family: var(--gc-serif);
-  font-weight: 400;
-  font-size: clamp(1.24rem, 2.2vw, 1.6rem);
-  line-height: 1.15;
-  letter-spacing: -.014em;
-  color: var(--gc-oxblood);
-  white-space: nowrap;
-}
-
-.gc-td-num {
-  font-family: var(--gc-serif);
-  font-weight: 300;
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  color: var(--gc-ink);
-}
-
-.gc-table thead .gc-td-num,
-.gc-table thead .gc-td-end { text-align: right; }
-.gc-table tbody .gc-td-num,
-.gc-table tbody .gc-td-end { text-align: right; }
-
-.gc-td-price {
-  font-family: var(--gc-serif);
-  font-weight: 500;
-  font-size: clamp(1.16rem, 1.9vw, 1.4rem);
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  color: var(--gc-ink);
-}
-
-.gc-td-unit {
-  font-size: .78em;
-  font-weight: 400;
-  color: var(--gc-ink-soft);
-}
-
-@media (max-width: 620px) {
-  .gc-table thead th { font-size: 9.5px; letter-spacing: .08em; }
-  .gc-table thead th,
-  .gc-table tbody td,
-  .gc-table tbody th { padding-left: 8px; padding-right: 8px; }
 }
 
 .gc-course-cta {

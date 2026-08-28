@@ -6,8 +6,8 @@ export default function ThePlace() {
     <section className="gc-place" id="the-place" data-gc-reveal-group>
       <p className="gc-place-lead">
         Four spaces at Malejor on the Adenta-Dodowa Road. A garden for two
-        thousand under mature trees, a naturally ventilated auditorium, an
-        air-conditioned hall, and a terrace.
+        thousand, a naturally ventilated auditorium, an air-conditioned hall,
+        and a terrace.
       </p>
       <p className="gc-place-sub">
         Standby generator, security and spacious enclosed parking across all of them.

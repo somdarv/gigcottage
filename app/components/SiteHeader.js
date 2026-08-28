@@ -94,9 +94,21 @@ export default function SiteHeader() {
         </Link>
 
         <div className="gc-hdr-cell gc-hdr-right">
-          <a className="gc-hdr-btn gc-phone" href={`tel:${CONTACT.phones[0].tel}`}>
-            {CONTACT.phones[0].label}
-          </a>
+          {/* Both numbers, not just the first — the footer and the mobile
+              menu have always carried the pair and the bar was the one place
+              that did not. The second drops out on narrower screens, where
+              there is no room for it beside the wordmark. */}
+          <span className="gc-hdr-phones">
+            {CONTACT.phones.map((phone, i) => (
+              <a
+                key={phone.tel}
+                className={`gc-hdr-btn gc-phone${i > 0 ? ' gc-phone--alt' : ''}`}
+                href={`tel:${phone.tel}`}
+              >
+                {phone.label}
+              </a>
+            ))}
+          </span>
           <a
             className="gc-hdr-btn gc-enq"
             href={whatsappLink()}

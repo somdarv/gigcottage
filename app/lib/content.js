@@ -8,9 +8,9 @@
 // not, at any depth. There is no `rate` field on a space to render by accident
 // — hire is quoted through an enquiry.
 //
-// Catering is the exception, and a deliberate one: a per-package buffet price
-// is a menu price, not a negotiation, and someone choosing between five
-// spreads is choosing on it. See CATERING below.
+// Catering carries no prices either. The five packages and their per-head
+// rates came off the site on the client's instruction (2026-08-28): what a
+// buffet costs is a conversation, and the menu is the part worth reading.
 
 export const CONTACT = {
   phones: [
@@ -50,7 +50,7 @@ export const SPACES = [
     slug: 'garden',
     name: 'Garden',
     seated: '2,000',
-    note: 'Expansive landscaped garden under beautiful trees and greenery, cooled by outdoor mist fans.',
+    note: 'Expansive landscaped garden with beautiful trees and greenery, cooled by outdoor mist fans.',
     included: [
       'Expansive landscaped garden',
       'Beautiful trees and greenery',
@@ -71,13 +71,12 @@ export const SPACES = [
   },
   {
     slug: 'auditorium',
-    name: 'Eco-friendly Large Auditorium',
+    name: 'Large Auditorium',
     shortName: 'Auditorium',
     seated: '1,000',
-    note: 'Large and fully enclosed, ventilated naturally. Comfortable airflow with no air conditioning required.',
+    note: 'Large naturally ventilated auditorium. Comfortable airflow with no air conditioning required.',
     included: [
-      'Large enclosed auditorium',
-      'Eco-friendly natural ventilation',
+      'Large naturally ventilated auditorium',
       'Indoor fans',
       'Comfortable airflow, no air conditioning required',
       'Spacious enclosed parking',
@@ -86,20 +85,21 @@ export const SPACES = [
       'Weddings',
       'Concerts',
       'Festivals',
+      'Funeral receptions',
       'Church programmes',
       'Corporate events',
       'Graduation ceremonies',
-      'Outdoor exhibitions',
+      'Exhibitions',
     ],
   },
   {
-    slug: 'mini-hall',
-    name: 'Mini Hall',
+    slug: 'executive-hall',
+    name: 'Executive Hall',
     seated: '120',
-    note: 'Fully air-conditioned and enclosed, with a private washroom.',
+    note: 'Fully air-conditioned and enclosed, with private washrooms.',
     included: [
       'Fully air-conditioned hall',
-      'Private washroom',
+      'Private washrooms',
       'Enclosed indoor venue',
       'Spacious parking',
       'Generator backup',
@@ -118,10 +118,10 @@ export const SPACES = [
     slug: 'terrace',
     name: 'Terrace',
     seated: '100',
-    note: 'Beautiful open-air terrace with a scenic view of the gardens.',
+    note: 'Beautiful open-air terrace with a scenic view of the garden.',
     included: [
       'Beautiful open-air terrace',
-      'Scenic view of the gardens',
+      'Scenic view of the garden',
       'Outdoor mist fans',
       'Access to spacious parking',
     ],
@@ -150,28 +150,22 @@ export const SERVICES = [
 
 // The catering menu, transcribed from the client's own menu card.
 //
-// NO PRICES here either — the card carries a rate per head for each package and
-// the site does not repeat it. What the packages are FOR is the shape: how many
-// courses, not what they cost.
+// NO PRICES, and no packages either — the five packages and their per-head
+// rates were taken off the site by the client (2026-08-28). What is left is
+// the food, which is the part someone is actually choosing between.
 export const CATERING = {
   note: 'Every buffet is served with green sauce, shito and Ghanaian salad.',
-  // The menu card prints a bare figure with no unit against each package. It
-  // reads as per head — GHS 95 for a whole buffet would not be a business —
-  // but it is not written down anywhere, so the site does not assert it. Set
-  // this to 'per person' once the client confirms and it appears beside every
-  // price.
-  priceUnit: '',
-  // Prices exactly as the menu card states them. The card gives no unit, so
-  // neither does this — see PRICE_UNIT below.
-  packages: [
-    { name: 'Taste', price: 'GHS 95', starters: 1, mains: 2, extras: 2 },
-    { name: 'Gathering', price: 'GHS 140', starters: 1, mains: 3, extras: 4 },
-    { name: 'Feast', price: 'GHS 210', starters: 2, mains: 4, extras: 6 },
-    { name: 'Celebration', price: 'GHS 280', starters: 2, mains: 4, extras: 8 },
-    { name: 'Royal', price: 'GHS 350', starters: 3, mains: 6, extras: 10 },
-  ],
   courses: [
-    { name: 'Starters', items: ['Samosa', 'Khebab', 'Spring rolls'] },
+    {
+      name: 'Starters',
+      items: [
+        'Samosa',
+        'Khebab',
+        'Spring rolls',
+        'Plantain chips',
+        'Coated groundnut',
+      ],
+    },
     {
       name: 'Main meals',
       items: [
@@ -180,12 +174,16 @@ export const CATERING = {
         'Palava sauce',
         'Shrimp stew',
         'Grilled tilapia and sauce',
+        'Light soup',
+        'Palm nut soup',
+        'Groundnut soup',
+        'Okra stew',
       ],
     },
     {
       name: 'Extras',
-      // Thirteen items against three and five — left in one column it ran to
-      // three times the height of its neighbours.
+      // Fifteen items against five and nine — left in one column it ran to
+      // twice the height of its neighbours.
       wide: true,
       items: [
         'Jollof rice',
@@ -201,6 +199,8 @@ export const CATERING = {
         'Tubani',
         'Yakeyake',
         'Kaklen',
+        'Apapransa',
+        'Fufu',
       ],
     },
   ],

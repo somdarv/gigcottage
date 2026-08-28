@@ -78,7 +78,7 @@ export const heroLqip =
 // photography, but every one is at least the KIND of space it is labelled.
 //
 // The sets are deliberately uneven. Garden and Terrace have three apiece
-// because there was honest material for three; Auditorium and Mini Hall have
+// because there was honest material for three; Auditorium and Executive Hall have
 // one each, and padding them out with grounds shots is exactly the dishonesty
 // that was removed earlier. The gallery renders a single-picture set as a plain
 // picture with no controls, so one is a legitimate state, not a broken one.
@@ -96,7 +96,7 @@ const SPACE_PICTURES = {
   auditorium: [
     picture('auditorium-seating', 'A seated audience in a tiered auditorium'),
   ],
-  'mini-hall': [
+  'executive-hall': [
     // Source is 2700px wide at 3:2, so there is no 2800 tier.
     picture('hall-banquet', 'An enclosed hall laid with round tables for an event', 2000),
   ],
@@ -115,7 +115,7 @@ const CARD_LADDER = { avif: [480, 760, 1100], webp: [480, 760, 1100] }
 const SPACE_CARDS = {
   garden: picture('card-garden', 'An open lawn running out to a mature tree', 1100, CARD_LADDER),
   auditorium: picture('card-auditorium', 'A seated audience in a tiered auditorium', 1100, CARD_LADDER),
-  'mini-hall': picture('card-mini-hall', 'An enclosed hall laid with round tables for an event', 1100, CARD_LADDER),
+  'executive-hall': picture('card-mini-hall', 'An enclosed hall laid with round tables for an event', 1100, CARD_LADDER),
   terrace: picture('card-terrace', 'An open-air timber terrace looking out over trees and water', 1100, CARD_LADDER),
 }
 
@@ -135,7 +135,7 @@ export const facilitiesBanner = picture(
   'A grass walk lined with palms at Gig Cottage, Malejor',
 )
 
-// The banner on /catering. Same source as the Mini Hall's picture, cropped
+// The banner on /catering. Same source as the Executive Hall's picture, cropped
 // tight on the laid tables so it reads as the meal rather than as the room —
 // reusing a frame is only cheap when it is the same frame. Source crop is
 // 2025px wide, so the ladder stops at 2000.

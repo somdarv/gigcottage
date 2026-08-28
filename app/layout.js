@@ -82,7 +82,7 @@ document.documentElement.classList.add('gc-reveal-ready');
 export const metadata = {
   title: "Gig Cottage | Event Spaces on the Adenta-Dodowa Road",
   description:
-    "Four event spaces at Malejor, Accra. A garden seating 2,000, an eco-friendly large auditorium, an air-conditioned mini hall and a terrace. Catering, beverages and floral.",
+    "Four event spaces at Malejor, Accra. A garden seating 2,000, a large naturally ventilated auditorium, an air-conditioned executive hall and a terrace. Catering, beverages and floral.",
 };
 
 export default function RootLayout({ children }) {
