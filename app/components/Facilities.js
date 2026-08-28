@@ -169,7 +169,7 @@ export default function Facilities() {
 
                   <figcaption className="gc-slide-cap">
                     <span className="gc-slide-rule" aria-hidden="true" />
-                    <h3 className="gc-slide-name">{space.name}</h3>
+                    <h2 className="gc-slide-name">{space.name}</h2>
                     {/* The figure stands on its own line rather than opening
                         the sentence — the client's instruction, and it is the
                         one thing on the slide anyone is scanning for. */}

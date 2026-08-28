@@ -1164,40 +1164,6 @@ html { scroll-behavior: smooth; }
   max-width: 20ch;
 }
 
-/* ------------------------------------------------------- page head, plain -- */
-/* /facilities opens on this instead of a photograph — the client took the
-   banner off (2026-08-28). It keeps the banner version's scale and its gold
-   full stop, so the page still arrives on a title rather than starting halfway
-   into the rail; it just does it on bone, in ink. The bar above is opaque from
-   the first pixel, so the padding only has to clear its height. */
-.gc-page-head {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: calc(var(--gc-hdr-h) + clamp(54px, 8vw, 108px)) var(--gc-pad) 0;
-  color: var(--gc-oxblood);
-}
-
-.gc-page-head-name {
-  margin: 0;
-  font-family: var(--gc-serif);
-  font-weight: 300;
-  font-size: clamp(2.6rem, 7vw, 5.2rem);
-  line-height: 1;
-  letter-spacing: -.022em;
-}
-
-/* Under the name, not over it — a full stop rather than an eyebrow, the same
-   way the banner version had it. */
-.gc-page-head-rule {
-  width: 64px;
-  height: 1px;
-  background: var(--gc-gold);
-  margin-top: clamp(20px, 2.6vw, 30px);
-  opacity: .9;
-}
-
 /* ------------------------------------------------------------- page hero -- */
 /* The opening frame on an inner page. Full bleed, unlike the rail below it —
    the page arrives wide and then narrows into the framed content, which is the
@@ -1279,11 +1245,26 @@ html { scroll-behavior: smooth; }
   letter-spacing: -.022em;
 }
 
+/* Reachable by a screen reader, invisible on screen. One user: the name of
+   the facilities page, which is not drawn any more but still has to be the
+   first heading in the document. */
+.gc-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* ------------------------------------------------------------ facilities -- */
-/* The heading and lead that used to sit here came off at the client's
-   request, and their padding went with them — so the section carries the
-   distance from the banner now. */
-.gc-fac { padding-top: clamp(76px, 10vw, 140px); }
+/* The heading, the lead and then the whole title block came off at the
+   client's request, and there is nothing above the rail any more — so this
+   padding is the only thing keeping the first slide out from under the fixed
+   bar. It has to carry the bar's height, not just a gap. */
+.gc-fac { padding-top: calc(var(--gc-hdr-h) + clamp(24px, 3.5vw, 48px)); }
 
 /* Contained, never full bleed. The bone margin either side is doing real work:
    it frames the picture as one considered object instead of letting it run to
