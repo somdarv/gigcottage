@@ -156,7 +156,7 @@ export default function Hero() {
 
       <div className="gc-hero-mid">
         <h1 className="gc-thesis gc-rise gc-d3">
-          Room for the whole guest list, on open ground.
+          Room for the whole guest list, out in the open or under a roof.
         </h1>
         <p className="gc-hero-sub gc-rise gc-d4">
           Up to 2,000 guests across four spaces. Weddings, concerts, church
