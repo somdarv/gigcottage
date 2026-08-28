@@ -165,8 +165,8 @@ export default function Hero() {
           Indoor and outdoor spaces, on one property.
         </h1>
         <p className="gc-hero-sub gc-rise gc-d4">
-          From 100 guests to 2,000. Weddings, concerts, church programmes and
-          conferences.
+          From 100 to 2000 guests. Weddings, concerts, funeral receptions,
+          church programmes and conferences.
         </p>
         <a
           className="gc-hero-cta gc-rise gc-d5"
