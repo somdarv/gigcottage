@@ -5,11 +5,12 @@ import { beveragesBanner, beveragesGlass } from '../lib/media'
 
 // Beverages.
 //
-// Five drinks is the whole list, so the page is built to hold five well rather
-// than to look like it holds more. The list takes one column and a picture
-// takes the other: padding it out with invented categories, or stretching five
-// rows across a full-width block, would both read as a page apologising for
-// its own content.
+// Five drinks is what they make here, so the page is built to hold five well
+// rather than to look like it holds more — the list takes one column and a
+// picture takes the other. What the lead now says is that five is not the
+// limit: the client's instruction (2026-08-28) was that whatever a guest
+// wants to drink, they will serve it. So the list reads as what comes from
+// this kitchen, not as what you are allowed to ask for.
 
 export const metadata = {
   title: 'Beverages | Gig Cottage',
@@ -53,8 +54,8 @@ export default function BeveragesPage() {
               Our Drinks
             </h2>
             <p className="gc-sec-lead" data-gc-reveal>
-              Pressed and mixed on the day, and served alongside the catering or
-              on their own. Order for your event and we will have them ready.
+              Whatever you want your guests drinking, we will serve it. Below is
+              what we make here — ask for anything else and we will have it.
             </p>
           </div>
 
