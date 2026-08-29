@@ -155,14 +155,8 @@ export default function Hero() {
       </div>
 
       <div className="gc-hero-mid">
-        {/* The client's own standing line, and she wants it read before
-            anything else on the page. Arrives a beat ahead of the headline. */}
-        <p className="gc-hero-mark gc-rise gc-d2">
-          <span className="gc-hero-mark-rule" aria-hidden="true" />
-          <span className="gc-hero-mark-text">Completely Events</span>
-        </p>
         <h1 className="gc-thesis gc-rise gc-d3">
-          Indoor and outdoor spaces, on one property.
+          One Property! Multiple Spaces! Endless Possibilities!
         </h1>
         <p className="gc-hero-sub gc-rise gc-d4">
           From 100 to 2000 guests. Weddings, concerts, funeral receptions,
