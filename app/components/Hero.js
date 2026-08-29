@@ -155,8 +155,13 @@ export default function Hero() {
       </div>
 
       <div className="gc-hero-mid">
+        {/* The break is deliberate, not a wrap: the third clause is the
+            promise, and the client wants it landing on a line of its own
+            rather than wherever the measure happens to put it. */}
         <h1 className="gc-thesis gc-rise gc-d3">
-          One Property! Multiple Spaces! Endless Possibilities!
+          One Property! Multiple Spaces!
+          <br />
+          Endless Possibilities!
         </h1>
         <p className="gc-hero-sub gc-rise gc-d4">
           From 100 to 2000 guests. Weddings, concerts, funeral receptions,
