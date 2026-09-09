@@ -214,15 +214,36 @@ body {
   animation: gc-intro-out .75s cubic-bezier(.4, 0, .2, 1) 2.4s forwards;
 }
 
-.gc-intro-mark {
-  width: clamp(228px, 38vw, 460px);
+/* The lift sits on the lockup rather than the wordmark, so the mark and the
+   line move into the page together. */
+.gc-intro-body {
+  display: grid;
+  justify-items: center;
+  gap: clamp(14px, 2.2vw, 22px);
   animation: gc-intro-lift .75s cubic-bezier(.4, 0, .2, 1) 2.4s both;
 }
 
+.gc-intro-mark { width: clamp(228px, 38vw, 460px); }
+
 .gc-intro-mark img { width: 100%; height: auto; }
 
-.gc-intro-mark img {
+/* One entrance, same start for both: they arrive as a lockup, not as two
+   staggered fades. */
+.gc-intro-mark img,
+.gc-intro-line {
   animation: gc-intro-in 1.05s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.gc-intro-line {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 500;
+  font-size: clamp(.95rem, 1.8vw, 1.2rem);
+  letter-spacing: -.01em;
+  line-height: 1.35;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--gc-ink-soft);
 }
 
 @keyframes gc-intro-in {
@@ -348,8 +369,8 @@ body {
   line-height: 1.03;
   letter-spacing: -.018em;
   text-wrap: balance;
-  /* Wide enough that the sentence balances over two lines, not three. The
-     break wants ~35 characters a line, so anything under 36ch drops a third. */
+  /* The line holds on one row on a wide viewport and breaks at the comma
+     below that. 38ch carries it without forcing an early wrap. */
   max-width: 38ch;
   color: #fefdfb;
 }
@@ -681,8 +702,9 @@ body {
   }
 
   .gc-intro { animation: gc-intro-out .3s linear 2.1s forwards; }
-  .gc-intro-mark,
-  .gc-intro-mark img { animation: none; }
+  .gc-intro-body,
+  .gc-intro-mark img,
+  .gc-intro-line { animation: none; }
   .gc-kb { transition: none; transform: none !important; }
   .gc-rail-track { transition: none; }
   .gc-frame { transition-duration: .001ms; }

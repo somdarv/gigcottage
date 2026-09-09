@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react'
 import { wordmark } from '../lib/media'
 
-// The wordmark's one moment: it holds alone on bone, then dissolves into the
-// hero. After this the logo is gone from the chrome entirely — it belongs in
-// the body of the site, not pinned to the header.
+// The wordmark's one moment: it holds on bone beneath the line the hero
+// opens with, then dissolves into that hero. After this the logo is gone
+// from the chrome entirely. It belongs in the body of the site, not pinned
+// to the header.
 //
 // The fade is a CSS animation with a forwards fill rather than a JS timer, so
 // a hydration failure cannot leave the overlay stranded across the page. React
@@ -34,9 +35,14 @@ export default function Intro() {
 
   return (
     <div className="gc-intro" aria-hidden="true">
-      <div className="gc-intro-mark">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={wordmark.src} alt="" width={wordmark.width} height={wordmark.height} />
+      <div className="gc-intro-body">
+        <div className="gc-intro-mark">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={wordmark.src} alt="" width={wordmark.width} height={wordmark.height} />
+        </div>
+        {/* Same words the hero opens with, so the page does not change its
+            mind between the load screen and the first view. */}
+        <p className="gc-intro-line">Built to host, ready for thousands</p>
       </div>
     </div>
   )
