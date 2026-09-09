@@ -106,7 +106,19 @@ const SPACE_PICTURES = {
     ),
   ],
   'executive-hall': [
-    picture('hall-still', 'The Executive Hall'),
+    // The laid-table still off the video came off at the client's request on
+    // 2026-09-09 and this replaced it, in every slot it appeared in.
+    //
+    // SMALL AND UPRIGHT, KNOWINGLY. The source is 960x1280 through a messaging
+    // app, so the ladder stops at 900 rather than advertising tiers that would
+    // be an upscale, and the rail slide renders it wider than that on a desktop
+    // anyway. It is also a portrait frame going into a 16:9 slide, so what the
+    // banner shows is a band across the middle: the blinds and the wall, with
+    // the floor and the ceiling cropped away. The card is 4:5 and gets nearly
+    // the whole frame, which is where this picture actually works.
+    //
+    // A landscape photograph of the room would fix both at once.
+    picture('hall-interior', 'The Executive Hall, blinds fitted along two walls', 900),
   ],
   terrace: [
     picture(
@@ -156,7 +168,9 @@ const CARD_LADDER = { avif: [480, 760, 1100], webp: [480, 760, 1100] }
 const SPACE_CARDS = {
   garden: picture('card-garden-lawn', 'The lawn from above, walled and planted along its edges', 1100, CARD_LADDER),
   auditorium: picture('card-auditorium-hall', 'The auditorium seen across the lawn', 1100, CARD_LADDER),
-  'executive-hall': picture('card-hall-still', 'The Executive Hall', 1100, CARD_LADDER),
+  // Stops at 760: the source is 960px wide, and the card is never rendered
+  // wider than about 340, so 760 already covers a 2x screen.
+  'executive-hall': picture('card-hall-interior', 'The Executive Hall, blinds fitted along two walls', 760, CARD_LADDER),
   terrace: picture('card-terrace-pavilion', 'The terrace under its curved roof', 1100, CARD_LADDER),
 }
 
