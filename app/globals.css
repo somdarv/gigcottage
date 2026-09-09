@@ -1271,28 +1271,52 @@ html { scroll-behavior: smooth; }
   transition: transform 1.05s var(--gc-ease-soft);
 }
 
+/* 16:9 at every width, and no height cap. These photographs came off the
+   camera at 16:9, so any other ratio here is a crop and the client asked for
+   the whole frame.
+
+   The cap that used to sit here was `max-height: 74vh`, which sounds harmless
+   and is not: with a fixed aspect-ratio, a height cap does not shrink the box,
+   it makes it WIDER than 16:9, and object-fit then eats the top and bottom of
+   the picture. On a 700px-tall laptop it was cropping every slide. Losing it
+   means a slide is 742px tall at the rail's full 1320px, so the section under
+   it is no longer promised at the bottom of the screen. That is the trade the
+   instruction asks for. */
 .gc-slide {
   position: relative;
   flex: 0 0 100%;
   margin: 0;
   overflow: hidden;
-  /* Wide enough to be the picture, short enough that the section below is
-     always promised at the bottom of the screen. */
-  aspect-ratio: 3 / 2;
-  max-height: 74vh;
+  aspect-ratio: 16 / 9;
 }
 
-@media (min-width: 900px) { .gc-slide { aspect-ratio: 16 / 9; } }
+/* On a phone 16:9 is only about 220px tall and the caption wants more than
+   that on its own — the auditorium's name alone takes two lines, then the
+   figure, three of note and a button. The old answer was a 4:5 box, which
+   bought the caption its room by cropping the sides off the photograph.
 
-/* On a phone the caption is the tallest thing in the frame — the auditorium's
-   name alone takes two lines, then three of note and a button. In a 3:2 box
-   that leaves a strip of photograph along the top, and the slide stops being
-   a picture. A portrait frame gives the picture its share back; the cap keeps
-   it from taking the whole screen. */
+   So the caption comes off the picture instead and sits under it on its own
+   ground. The picture keeps its whole frame, the words keep their space, and
+   nothing has to be cut to make them share. */
 @media (max-width: 619px) {
   .gc-slide {
-    aspect-ratio: 4 / 5;
-    max-height: 76vh;
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gc-slide img {
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  /* There is no longer a picture under the words to shade. */
+  .gc-slide::after { display: none; }
+
+  .gc-slide-cap {
+    position: static;
+    flex: 1;
+    background: var(--gc-oxblood-deep);
   }
 }
 
@@ -2181,10 +2205,13 @@ html { scroll-behavior: smooth; }
   transition: transform 1.05s var(--gc-ease-soft);
 }
 
+/* No height cap, for the reason spelled out on .gc-slide: against a fixed
+   aspect-ratio a max-height widens the box past 16:9 and object-fit takes the
+   difference off the top and bottom of the picture. This was the second half
+   of why the terrace looked zoomed in. */
 .gc-gal-cell {
   flex: 0 0 100%;
   aspect-ratio: 16 / 9;
-  max-height: 70vh;
 }
 
 .gc-gal-cell picture { display: contents; }

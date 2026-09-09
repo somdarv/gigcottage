@@ -166,7 +166,20 @@ const CARD_LADDER = { avif: [480, 760, 1100], webp: [480, 760, 1100] }
 // had not moved. Every name here changed with its picture, and the next swap
 // has to change it again.
 const SPACE_CARDS = {
-  garden: picture('card-garden-lawn', 'The lawn from above, walled and planted along its edges', 1100, CARD_LADDER),
+  // Not a slice of the aerial. This one was taken standing on the grass, which
+  // is the shot the aerial was standing in for, and upright it needs no crop
+  // worth the name. The banner on /facilities is still the aerial: that frame
+  // carries the size of the place, this one carries what it is like to be in
+  // it, and they are doing different jobs.
+  //
+  // 608x1080 through a messaging app, so the ladder stops at its own width
+  // rather than advertising a tier that would be an upscale.
+  garden: picture(
+    'card-garden-palm',
+    'A traveller’s palm at the edge of the lawn',
+    Infinity,
+    { avif: [480, 608], webp: [480, 608] },
+  ),
   auditorium: picture('card-auditorium-hall', 'The auditorium seen across the lawn', 1100, CARD_LADDER),
   // Stops at 760: the source is 960px wide, and the card is never rendered
   // wider than about 340, so 760 already covers a 2x screen.
