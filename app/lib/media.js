@@ -8,9 +8,18 @@
 //
 // Stills ship as AVIF with a WebP fallback: AVIF is roughly a third smaller at
 // matching quality, which is what buys the 2800w tier without the first paint
-// costing more. Every source is cropped to 3:2 at generation time rather than
-// left to object-fit, so no viewport is ever handed a third of an image it
-// will not show.
+// costing more. Sources are cropped at generation time rather than left to
+// object-fit, so no viewport is handed a third of an image it will not show.
+//
+// The crop is 16:9 for anything a space uses, because that is the ratio of
+// both the gallery cell and the rail slide, and every one of those frames came
+// off the camera at 16:9. They were cut to 3:2 at first, which threw away a
+// band down each side and then lost more to the slot, and on the terrace you
+// could see it. Matching the slot means the picture arrives whole.
+//
+// The hero keeps 3:2. It is the one full-viewport picture on the site, so a
+// phone held upright crops it hardest, and the taller frame is what survives
+// that.
 
 const AVIF_W = [900, 1400, 2000, 2800]
 const WEBP_W = [900, 1400, 2000]
@@ -77,18 +86,18 @@ export const heroLqip =
 // them out with grounds shots is exactly the dishonesty that was removed
 // earlier, so they stay at one until the client sends more.
 //
-// Garden is STILL STOCK, all three of it. It is the only space with no
-// photography of its own yet, and it is the obvious next thing to ask for.
+// Garden is the aerial, the same photograph the home page opens on. There is
+// no photograph of the garden as its own space, and the lawn in that frame is
+// the garden, so it stands here rather than the stock lawn it replaced. It
+// does mean the two pages are one picture seen twice. A shot taken standing
+// on the grass is the thing to ask them for, and it drops straight in.
 //
 // Executive Hall's entry is the still off their own clip. The gallery shows
 // the clip instead of this picture, but the rail and the page header need a
 // frame that is not a video, and this is it.
 const SPACE_PICTURES = {
   garden: [
-    picture('lawn-tree', 'An open lawn running out to a mature tree'),
-    picture('garden-path', 'A stone path running beside the lawn under mature trees'),
-    // Source is 2000px wide, so there is no tier above it.
-    picture('garden-beds', 'Clipped hedge beds framing a stretch of open lawn', 2000),
+    picture('garden-lawn', 'The lawn from above, walled and planted along its edges'),
   ],
   auditorium: [
     picture(
