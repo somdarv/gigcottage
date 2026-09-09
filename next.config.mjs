@@ -36,6 +36,18 @@ const nextConfig = {
   // Next serves /public with no-cache by default, so every repeat visit
   // re-fetches the hero. These filenames carry their own width and codec, so a
   // changed asset is always a new URL and a long immutable cache is safe.
+  //
+  // NOT IN EFFECT ON THE HOST, checked 2026-09-09. A response from /hero comes
+  // back with `server: LiteSpeed` and no `x-powered-by`, so LiteSpeed is
+  // serving those files off disk and the request never reaches Node. What
+  // ships is LiteSpeed's own `last-modified` and nothing else, which leaves
+  // browsers to guess a freshness window from the file's age. It still applies
+  // under `next start` locally.
+  //
+  // The practical consequence is the same either way: a picture that changes
+  // has to change its filename. Overwriting one in place leaves visitors on
+  // the old bytes, which is exactly how the facility cards kept showing stock
+  // after they had been replaced.
   async headers() {
     const immutable = [
       { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },

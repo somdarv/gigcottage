@@ -147,12 +147,17 @@ export const spaceVideo = (slug) => SPACE_VIDEOS[slug] || null
 // would only ever hand them a file far larger than the slot.
 const CARD_LADDER = { avif: [480, 760, 1100], webp: [480, 760, 1100] }
 
+// NEVER REGENERATE ONE OF THESE UNDER ITS OWN NAME. A file under /hero is
+// served straight off disk by LiteSpeed, and a browser that already holds the
+// old bytes keeps showing them: the four cards below were swapped for the
+// client's own photographs and carried on displaying stock, because the URL
+// had not moved. Every name here changed with its picture, and the next swap
+// has to change it again.
 const SPACE_CARDS = {
-  // Garden is the one card still cut from stock.
-  garden: picture('card-garden', 'An open lawn running out to a mature tree', 1100, CARD_LADDER),
-  auditorium: picture('card-auditorium', 'The auditorium seen across the lawn', 1100, CARD_LADDER),
-  'executive-hall': picture('card-mini-hall', 'The Executive Hall', 1100, CARD_LADDER),
-  terrace: picture('card-terrace', 'The terrace under its curved roof', 1100, CARD_LADDER),
+  garden: picture('card-garden-lawn', 'The lawn from above, walled and planted along its edges', 1100, CARD_LADDER),
+  auditorium: picture('card-auditorium-hall', 'The auditorium seen across the lawn', 1100, CARD_LADDER),
+  'executive-hall': picture('card-hall-still', 'The Executive Hall', 1100, CARD_LADDER),
+  terrace: picture('card-terrace-pavilion', 'The terrace under its curved roof', 1100, CARD_LADDER),
 }
 
 export const spaceCard = (slug) => SPACE_CARDS[slug]
