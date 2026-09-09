@@ -1,8 +1,10 @@
 // Every image and video the site plays lives in this file.
 //
-// These are stock photographs standing in for the venue's own material. When
-// the real photography arrives, regenerate the derivatives at the same widths
-// and update the alt text here — nothing else in the app needs to change.
+// Mixed provenance, and the comments below say which is which. The aerial,
+// the auditorium, the terrace and the Executive Hall are the venue's own,
+// sent 2026-09-09. The garden set is still stock standing in. To swap any of
+// them, regenerate the derivatives at the same widths and update the alt text
+// here. Nothing else in the app needs to change.
 //
 // Stills ship as AVIF with a WebP fallback: AVIF is roughly a third smaller at
 // matching quality, which is what buys the 2800w tier without the first paint
@@ -44,48 +46,43 @@ const shot = (name, alt, hold = 6500, cap) => ({
   ...picture(name, alt, cap),
 })
 
+// One frame, and it is theirs. The aerial is the only picture that shows the
+// whole property at once, which is the thing the headline claims, so it opens
+// the site on its own rather than taking a turn in a rotation.
+//
+// The stock garden stills and the wedding clip that used to sit here are gone.
+// Hero keeps the machinery for a set, so a second photograph of theirs is one
+// more line in this array and nothing else has to change.
 export const heroFrames = [
-  shot('garden-path', 'A stone path running beside the lawn under mature trees'),
-  {
-    // Holds longer than the stills — motion needs room to read, and this is
-    // the only frame that shows the place actually in use.
-    kind: 'video',
-    alt: 'White chairs and flowers being set out on the lawn for a wedding',
-    hold: 11000,
-    // H.264 1920x1080. AV1 was smaller at the same resolution but almost no
-    // machine has AV1 hardware decode, and software-decoding 1080p AV1 while
-    // the page is also compositing a full-viewport hero drops frames. H.264
-    // decodes in hardware essentially everywhere, so it plays smooth.
-    src: '/videos/wedding-setup.mp4',
-    // A single URL: <video poster> takes no srcset, and the clip is desktop
-    // only, so there is nothing smaller to serve.
-    poster: '/hero/wedding-poster-1400.webp',
-  },
-  // Source is 2000px wide, so there is no tier above it.
-  shot('garden-beds', 'Clipped hedge beds framing a stretch of open lawn', 6500, 2000),
+  shot(
+    'lawn-aerial',
+    'The lawn, the auditorium and the grounds seen from above',
+  ),
 ]
 
 // Tiny inline blur behind the first frame so there is no flash of empty ground
 // before it decodes. Later frames dissolve in from an already painted one.
 export const heroLqip =
-  'data:image/webp;base64,UklGRqAAAABXRUJQVlA4IJQAAABQBACdASoYABAAPu1iqU2ppaOiMAgBMB2JbACdAB+X9PG3q1/P4530pdEwAP7qltaNA3+/gLyAcbYuDQ1600PmOaSzum5EpS7rKZR2YQOeMnBi7L8sOXZUjcp2cx8Y1S7ReiRfysF+ycbYEfCGD2RcUCPzle3DJboAOJW7a6s9o4OrT4LjFwiZ2qOovBdeYc3R6uAA'
+  'data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAAAQBACdASoYABAAPu1iqU2ppaOiMAgBMB2JbACdMoADg7Jo4KVD/UA0AAD7dVmaxdnW8s0RLPoBY1FxYZOwfV0NCwKGLaFoWiLQCz0it03Q2ts7XkejW68d2mKu5sEe2+8KogfV02/i3Zcac7w0qRMMOF/t8HgxoJdp+SKxy0JyeQCc+E5l6uozfeve5OZr/wAAAA=='
 
 // The pictures for each space, in the order they should be seen. The first is
 // the one the rail and the page header use; the rest exist only in the gallery
 // on the space's own page.
 //
-// PLACEHOLDER STATUS: all of these are stock standing in for the venue's own
-// photography, but every one is at least the KIND of space it is labelled.
+// The sets are deliberately uneven, and one photograph is a finished state
+// here rather than a broken one. The gallery renders a single-picture set as
+// a plain picture with no controls.
 //
-// The sets are deliberately uneven. Garden and Terrace have three apiece
-// because there was honest material for three; Auditorium and Executive Hall have
-// one each, and padding them out with grounds shots is exactly the dishonesty
-// that was removed earlier. The gallery renders a single-picture set as a plain
-// picture with no controls, so one is a legitimate state, not a broken one.
+// Auditorium and Terrace are the venue's own, one honest frame each. Padding
+// them out with grounds shots is exactly the dishonesty that was removed
+// earlier, so they stay at one until the client sends more.
 //
-// Two caveats worth knowing before these ship: the auditorium frame is
-// deliberately defocused (a stock shot of an audience), and the hall is a 3D
-// render rather than a photograph.
+// Garden is STILL STOCK, all three of it. It is the only space with no
+// photography of its own yet, and it is the obvious next thing to ask for.
+//
+// Executive Hall's entry is the still off their own clip. The gallery shows
+// the clip instead of this picture, but the rail and the page header need a
+// frame that is not a video, and this is it.
 const SPACE_PICTURES = {
   garden: [
     picture('lawn-tree', 'An open lawn running out to a mature tree'),
@@ -94,18 +91,47 @@ const SPACE_PICTURES = {
     picture('garden-beds', 'Clipped hedge beds framing a stretch of open lawn', 2000),
   ],
   auditorium: [
-    picture('auditorium-seating', 'A seated audience in a tiered auditorium'),
+    picture(
+      'auditorium-hall',
+      'The auditorium seen across the lawn, open along its length under a pitched roof',
+    ),
   ],
   'executive-hall': [
-    // Source is 2700px wide at 3:2, so there is no 2800 tier.
-    picture('hall-banquet', 'An enclosed hall laid with round tables for an event', 2000),
+    picture('hall-still', 'The Executive Hall'),
   ],
   terrace: [
-    picture('terrace-deck', 'An open-air timber terrace looking out over trees and water'),
-    picture('terrace-stone', 'A stone terrace with built-in seating under a timber pergola'),
-    picture('terrace-seating', 'A paved terrace set with low seating and planting'),
+    picture(
+      'terrace-pavilion',
+      'The terrace, a curved roof carried on columns above a tiled floor',
+    ),
   ],
 }
+
+// The Executive Hall is the one space the client sent moving footage of, and
+// they asked for the clip alone rather than the clip beside a still.
+//
+// SMALL, KNOWINGLY. The source is 360x640: a portrait phone frame that has
+// been through a messaging app, at roughly a third of the width the gallery
+// slot wants. It plays contained at its own size instead of stretched across
+// the slot, for the same reason the floral arrangement below is contained. Ask
+// them for the original off the phone and it can run wider.
+//
+// H.264 in an mp4 at 0.86MB, so it decodes in hardware anywhere and costs
+// about a quarter of what the wedding clip did.
+const SPACE_VIDEOS = {
+  'executive-hall': {
+    src: '/videos/executive-hall.mp4',
+    // Deliberately plain. Nobody on this side has watched the clip, and a
+    // confident description of footage you have not seen is how alt text
+    // starts lying. Tighten it once someone has.
+    alt: 'A short clip of the Executive Hall',
+    width: 360,
+    height: 640,
+  },
+}
+
+// The clip for a space, where there is one.
+export const spaceVideo = (slug) => SPACE_VIDEOS[slug] || null
 
 // Portrait crops for the home-page cards, on their own ladder — the cards are
 // never wider than a quarter of the container, so the shared 900-2800 ladder
@@ -113,10 +139,11 @@ const SPACE_PICTURES = {
 const CARD_LADDER = { avif: [480, 760, 1100], webp: [480, 760, 1100] }
 
 const SPACE_CARDS = {
+  // Garden is the one card still cut from stock.
   garden: picture('card-garden', 'An open lawn running out to a mature tree', 1100, CARD_LADDER),
-  auditorium: picture('card-auditorium', 'A seated audience in a tiered auditorium', 1100, CARD_LADDER),
-  'executive-hall': picture('card-mini-hall', 'An enclosed hall laid with round tables for an event', 1100, CARD_LADDER),
-  terrace: picture('card-terrace', 'An open-air timber terrace looking out over trees and water', 1100, CARD_LADDER),
+  auditorium: picture('card-auditorium', 'The auditorium seen across the lawn', 1100, CARD_LADDER),
+  'executive-hall': picture('card-mini-hall', 'The Executive Hall', 1100, CARD_LADDER),
+  terrace: picture('card-terrace', 'The terrace under its curved roof', 1100, CARD_LADDER),
 }
 
 export const spaceCard = (slug) => SPACE_CARDS[slug]

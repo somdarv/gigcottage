@@ -288,8 +288,7 @@ body {
 /* <picture> is a wrapper only — let the <img> be the layout child of .gc-kb. */
 .gc-frame picture { display: contents; }
 
-.gc-frame img,
-.gc-frame video {
+.gc-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -305,13 +304,6 @@ body {
 }
 
 .gc-frame.is-on .gc-kb { transform: scale(1); }
-
-/* No drift on the clip. It already moves, and continuously re-compositing a
-   scaled 1080p video for nine seconds is what makes playback judder. */
-.gc-frame--video .gc-kb {
-  transform: none !important;
-  transition: none;
-}
 
 /* Shading only, no colour cast — the greens stay green.
    
@@ -1725,6 +1717,30 @@ html { scroll-behavior: smooth; }
   max-width: 1320px;
   margin: clamp(36px, 5vw, 64px) auto 0;
   padding: 0 var(--gc-pad);
+}
+
+/* A space whose only material is a clip. The ground is the deep oxblood so
+   the portrait frame reads as placed on a surface rather than stranded in the
+   middle of the page with bone either side of it. */
+.gc-spacevid {
+  display: grid;
+  place-items: center;
+  background: var(--gc-oxblood-deep);
+  padding: clamp(24px, 4vw, 56px);
+}
+
+/* 360px is the clip's own width and it does not go above it. Anything wider
+   is upscaling a phone frame to fill a gap, which is the thing this layout
+   exists to avoid. The height cap keeps a 9:16 frame from running past the
+   fold on a short laptop screen. */
+.gc-spacevid-el {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  max-height: min(640px, 74vh);
+  height: auto;
+  object-fit: contain;
+  background: #000;
 }
 
 .gc-detail-body {

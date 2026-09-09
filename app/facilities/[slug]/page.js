@@ -3,9 +3,10 @@ import Link from 'next/link'
 import SiteHeader from '../../components/SiteHeader'
 import SiteFooter from '../../components/SiteFooter'
 import FacilityGallery from '../../components/FacilityGallery'
+import FacilityVideo from '../../components/FacilityVideo'
 import EnquiryForm from '../../components/EnquiryForm'
 import { SPACES, spacePath } from '../../lib/content'
-import { spaceGallery } from '../../lib/media'
+import { spaceGallery, spaceVideo } from '../../lib/media'
 
 // The reading end of a facility. The rail on /facilities carries one picture
 // and the name; everything that has to be read rather than glanced at is here.
@@ -60,7 +61,14 @@ export default function FacilityPage({ params }) {
         </div>
 
         <div className="gc-detail-media">
-          <FacilityGallery pictures={spaceGallery(space.slug)} name={space.name} />
+          {/* A space with footage shows the footage and nothing else. Only the
+              Executive Hall has any, and the client asked for the clip alone
+              rather than the clip beside a still of the same room. */}
+          {spaceVideo(space.slug) ? (
+            <FacilityVideo video={spaceVideo(space.slug)} />
+          ) : (
+            <FacilityGallery pictures={spaceGallery(space.slug)} name={space.name} />
+          )}
         </div>
 
         <div className="gc-detail-body">

@@ -1,30 +1,20 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { CONTACT, SPACES, whatsappLink } from '../lib/content'
 import { heroFrames, heroLqip } from '../lib/media'
 
-// One stage that cross-dissolves through stills and the wedding clip, rather
-// than several videos playing at once — it reads as one continuous piece and
-// only ever loads one asset at a time.
+// One stage that cross-dissolves through the frames it is given. There is a
+// single photograph in it today, so nothing dissolves and the controls do not
+// render. The set is still a set, so a second frame added in media.js brings
+// the rotation back on its own.
 export default function Hero() {
   const [active, setActive] = useState(0)
   const [armed, setArmed] = useState(false)
-  const [allowVideo, setAllowVideo] = useState(false)
   const [reduced, setReduced] = useState(false)
-  const videoRef = useRef(null)
 
-  // When the clip is gated off we drop it from the rotation rather than
-  // falling back to its poster — the poster is a frame of the clip, so it
-  // would read as a still that never moves.
-  const frames = useMemo(
-    () => (allowVideo ? heroFrames : heroFrames.filter((f) => f.kind !== 'video')),
-    [allowVideo],
-  )
-
-  useEffect(() => {
-    setActive((current) => Math.min(current, frames.length - 1))
-  }, [frames.length])
+  const frames = heroFrames
+  const many = frames.length > 1
 
   const advance = useCallback(
     (step) => setActive((current) => (current + step + frames.length) % frames.length),
@@ -46,44 +36,12 @@ export default function Hero() {
     return () => cancelAnimationFrame(id)
   }, [])
 
-  // The clip is ~4MB. It is worth it on a laptop and it is not worth it on
-  // Ghanaian mobile data, so small screens and metered connections keep the
-  // stills. Mounting it late also lets the first frame win the bandwidth.
+  // With one frame there is nothing to advance to, so no timer is armed.
   useEffect(() => {
-    if (reduced) return undefined
-    const connection = navigator.connection || {}
-    const wideEnough = window.matchMedia('(min-width: 768px)').matches
-    const cheapEnough =
-      !connection.saveData && !/(^|-)2g$/.test(connection.effectiveType || '')
-    if (!wideEnough || !cheapEnough) return undefined
-
-    const id = setTimeout(() => setAllowVideo(true), 2600)
-    return () => clearTimeout(id)
-  }, [reduced])
-
-  useEffect(() => {
-    if (reduced) return undefined
+    if (reduced || !many) return undefined
     const id = setTimeout(() => advance(1), frames[active].hold)
     return () => clearTimeout(id)
-  }, [active, frames, reduced, advance])
-
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-    if (frames[active].kind === 'video') {
-      video.muted = true
-      try {
-        video.currentTime = 0
-      } catch {
-        /* not seekable yet — it will play from wherever it is */
-      }
-      video.play().catch(() => {
-        /* autoplay refused; the poster stays up, which is fine */
-      })
-    } else {
-      video.pause()
-    }
-  }, [active, frames])
+  }, [active, frames, reduced, advance, many])
 
   /* ------------------------------------------------------------------- swipe */
 
@@ -115,38 +73,23 @@ export default function Hero() {
         {frames.map((frame, i) => (
           <div
             key={frame.src}
-            className={`gc-frame${i === active ? ' is-on' : ''}${
-              frame.kind === 'video' ? ' gc-frame--video' : ''
-            }`}
+            className={`gc-frame${i === active ? ' is-on' : ''}`}
             style={i === 0 ? { backgroundImage: `url(${heroLqip})` } : undefined}
           >
             <div className="gc-kb">
-              {frame.kind === 'video' ? (
-                <video
-                  ref={videoRef}
+              <picture>
+                <source type="image/avif" srcSet={frame.avifSrcSet} sizes="100vw" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={frame.src}
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  poster={frame.poster}
-                  aria-label={frame.alt}
+                  srcSet={frame.srcSet}
+                  sizes="100vw"
+                  alt={frame.alt}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={i === 0 ? 'high' : 'low'}
+                  decoding="async"
                 />
-              ) : (
-                <picture>
-                  <source type="image/avif" srcSet={frame.avifSrcSet} sizes="100vw" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={frame.src}
-                    srcSet={frame.srcSet}
-                    sizes="100vw"
-                    alt={frame.alt}
-                    loading={i === 0 ? 'eager' : 'lazy'}
-                    fetchPriority={i === 0 ? 'high' : 'low'}
-                    decoding="async"
-                  />
-                </picture>
-              )}
+              </picture>
             </div>
           </div>
         ))}
@@ -202,21 +145,23 @@ export default function Hero() {
           <i />
         </div>
 
-        <div className="gc-ticks gc-rise gc-d5">
-          {frames.map((frame, i) => (
-            <button
-              key={frame.src}
-              type="button"
-              className={`gc-tick${armed && i === active ? ' is-on' : ''}`}
-              style={{ '--gc-hold': `${frame.hold}ms` }}
-              aria-label={`Show image ${i + 1} of ${frames.length}`}
-              aria-current={i === active}
-              onClick={() => setActive(i)}
-            >
-              <i />
-            </button>
-          ))}
-        </div>
+        {many && (
+          <div className="gc-ticks gc-rise gc-d5">
+            {frames.map((frame, i) => (
+              <button
+                key={frame.src}
+                type="button"
+                className={`gc-tick${armed && i === active ? ' is-on' : ''}`}
+                style={{ '--gc-hold': `${frame.hold}ms` }}
+                aria-label={`Show image ${i + 1} of ${frames.length}`}
+                aria-current={i === active}
+                onClick={() => setActive(i)}
+              >
+                <i />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
