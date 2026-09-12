@@ -1,10 +1,14 @@
 // Every image and video the site plays lives in this file.
 //
-// Mixed provenance, and the comments below say which is which. The aerial,
-// the auditorium, the terrace and the Executive Hall are the venue's own,
-// sent 2026-09-09. The garden set is still stock standing in. To swap any of
-// them, regenerate the derivatives at the same widths and update the alt text
-// here. Nothing else in the app needs to change.
+// The venue's own photography, sent 2026-09-12: a proper camera shoot, 3400 to
+// 5472px on the long edge, covering the grounds, the auditorium, the terrace
+// and the Executive Hall. It replaced the phone frames that came through a
+// messaging app, and with them every "small, knowingly" note this file used to
+// carry. Three banners are still stock and say so: catering, beverages, and the
+// bridal bouquet.
+//
+// To swap any picture, regenerate the derivatives at the same widths and update
+// the alt text here. Nothing else in the app needs to change.
 //
 // Stills ship as AVIF with a WebP fallback: AVIF is roughly a third smaller at
 // matching quality, which is what buys the 2800w tier without the first paint
@@ -29,13 +33,17 @@ const set = (name, ext, widths) =>
 
 // One picture, every tier of it. Callers pick their own `sizes`.
 //
-// `cap` is for sources too small to fill the top tier without upscaling: the
-// generator skips those files, so advertising them in the srcset would point
-// the browser at a 404. Give it the widest tier that actually exists.
+// `cap` is the widest file that exists on disk for this name: the generator
+// skips anything above it, so advertising more in the srcset would point the
+// browser at a 404. Two reasons a name is capped. A source too small to reach
+// the top tier without upscaling is one. The other is deliberate: a picture
+// that only ever appears inside the gallery stops at 2000, because the slot is
+// 1320px at its widest and 2000 already covers it on a 1.5x screen. The 2800
+// tier is for the hero and for the one picture that heads each space.
 //
 // `ladder` replaces the standard widths outright, for a picture generated on
-// its own scale — the floral photograph is 1280px and needs tiers below the
-// shared ladder's floor, not above it.
+// its own scale — the cards sit at a quarter of the container and need tiers
+// below the shared ladder's floor, not above it.
 const picture = (name, alt, cap = Infinity, ladder) => {
   const avif = (ladder ? ladder.avif : AVIF_W).filter((w) => w <= cap)
   const webp = (ladder ? ladder.webp : WEBP_W).filter((w) => w <= cap)
@@ -55,17 +63,21 @@ const shot = (name, alt, hold = 6500, cap) => ({
   ...picture(name, alt, cap),
 })
 
-// One frame, and it is theirs. The aerial is the only picture that shows the
-// whole property at once, which is the thing the headline claims, so it opens
-// the site on its own rather than taking a turn in a rotation.
+// Two frames, both theirs, and they do different jobs. The aerial is the only
+// picture that shows the whole property at once, which is the thing the
+// headline claims. The second was taken standing on the grass at the far end,
+// and it is what a guest sees walking in. Scale, then arrival.
 //
-// The stock garden stills and the wedding clip that used to sit here are gone.
-// Hero keeps the machinery for a set, so a second photograph of theirs is one
-// more line in this array and nothing else has to change.
+// The hero cross-dissolves on its own once there is more than one frame, so a
+// third is one more line here and nothing else.
 export const heroFrames = [
   shot(
     'lawn-aerial',
     'The lawn, the auditorium and the grounds seen from above',
+  ),
+  shot(
+    'lawn-open',
+    'The lawn from ground level, with the guest block and the terrace along the far side',
   ),
 ]
 
@@ -75,81 +87,95 @@ export const heroLqip =
   'data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAAAQBACdASoYABAAPu1iqU2ppaOiMAgBMB2JbACdMoADg7Jo4KVD/UA0AAD7dVmaxdnW8s0RLPoBY1FxYZOwfV0NCwKGLaFoWiLQCz0it03Q2ts7XkejW68d2mKu5sEe2+8KogfV02/i3Zcac7w0qRMMOF/t8HgxoJdp+SKxy0JyeQCc+E5l6uozfeve5OZr/wAAAA=='
 
 // The pictures for each space, in the order they should be seen. The first is
-// the one the rail and the page header use; the rest exist only in the gallery
-// on the space's own page.
+// the one the rail and the page header use, and the only one in the set on the
+// full ladder; the rest live inside the gallery and stop at 2000.
 //
-// The sets are deliberately uneven, and one photograph is a finished state
-// here rather than a broken one. The gallery renders a single-picture set as
-// a plain picture with no controls.
-//
-// Auditorium and Terrace are the venue's own, one honest frame each. Padding
-// them out with grounds shots is exactly the dishonesty that was removed
-// earlier, so they stay at one until the client sends more.
-//
-// Garden is the aerial, the same photograph the home page opens on. There is
-// no photograph of the garden as its own space, and the lawn in that frame is
-// the garden, so it stands here rather than the stock lawn it replaced. It
-// does mean the two pages are one picture seen twice. A shot taken standing
-// on the grass is the thing to ask them for, and it drops straight in.
-//
-// Executive Hall's entry is the still off their own clip. The gallery shows
-// the clip instead of this picture, but the rail and the page header need a
-// frame that is not a video, and this is it.
+// Every frame here is the venue's own. The stock lawns are gone, and so is the
+// note that used to apologise for them.
 const SPACE_PICTURES = {
   garden: [
-    picture('garden-lawn', 'The lawn from above, walled and planted along its edges'),
+    // The lawn as its own space, at standing height. The aerial still earns a
+    // place at the end of the set — it is the only frame that shows how far the
+    // grass runs — but it is no longer doing the introducing.
+    picture(
+      'garden-open',
+      'The open lawn, with palms and the boundary planting along the far edge',
+    ),
+    picture(
+      'garden-traveller',
+      'A traveller’s palm at the edge of the lawn, fanned out above the shrubs',
+      2000,
+    ),
+    picture('garden-lawn', 'The lawn from above, planted along its edges', 2000),
   ],
   auditorium: [
     picture(
       'auditorium-hall',
       'The auditorium seen across the lawn, open along its length under a pitched roof',
     ),
+    picture(
+      'auditorium-urns',
+      'The auditorium across the grass, with planted urns in the foreground',
+      2000,
+    ),
+    picture(
+      'auditorium-terrace',
+      'The auditorium framed between two terrace columns, the lawn running between them',
+      2000,
+    ),
+    picture(
+      'auditorium-eaves',
+      'The auditorium close to, its open bays and the louvred band under the eaves',
+      2000,
+    ),
   ],
   'executive-hall': [
-    // The laid-table still off the video came off at the client's request on
-    // 2026-09-09 and this replaced it, in every slot it appeared in.
-    //
-    // SMALL AND UPRIGHT, KNOWINGLY. The source is 960x1280 through a messaging
-    // app, so the ladder stops at 900 rather than advertising tiers that would
-    // be an upscale, and the rail slide renders it wider than that on a desktop
-    // anyway. It is also a portrait frame going into a 16:9 slide, so what the
-    // banner shows is a band across the middle: the blinds and the wall, with
-    // the floor and the ceiling cropped away. The card is 4:5 and gets nearly
-    // the whole frame, which is where this picture actually works.
-    //
-    // A landscape photograph of the room would fix both at once.
-    picture('hall-interior', 'The Executive Hall, blinds fitted along two walls', 900),
+    // Their camera, and the room is empty in all three: it was photographed
+    // finished but unfurnished, so what these show is the floor, the height and
+    // the light rather than a room dressed for an event. A set taken with
+    // tables in is the thing to ask for next.
+    picture(
+      'hall-room',
+      'The Executive Hall, a polished dark floor running the width of the room',
+    ),
+    picture(
+      'hall-entrance',
+      'The Executive Hall looking towards its entrance, columns to either side',
+      2000,
+    ),
+    // Honestly labelled. This one is the corridor outside the room rather than
+    // the room, and the alt text says so instead of calling it the hall.
+    picture('hall-lobby', 'The corridor leading into the Executive Hall', 2000),
   ],
   terrace: [
     picture(
       'terrace-pavilion',
       'The terrace, a curved roof carried on columns above a tiled floor',
     ),
+    picture(
+      'terrace-dusk',
+      'The terrace at dusk, the lawn beside it under a pink sky',
+      2000,
+    ),
+    picture(
+      'terrace-evening',
+      'The terrace colonnade in the evening, the grounds beyond it',
+      2000,
+    ),
+    picture(
+      'terrace-urn',
+      'A fan palm in a terracotta urn between the terrace columns',
+      2000,
+    ),
   ],
 }
 
-// The Executive Hall is the one space the client sent moving footage of, and
-// they asked for the clip alone rather than the clip beside a still.
-//
-// SMALL, KNOWINGLY. The source is 360x640: a portrait phone frame that has
-// been through a messaging app, at roughly a third of the width the gallery
-// slot wants. It plays contained at its own size instead of stretched across
-// the slot, for the same reason the floral arrangement below is contained. Ask
-// them for the original off the phone and it can run wider.
-//
-// H.264 in an mp4 at 0.86MB, so it decodes in hardware anywhere and costs
-// about a quarter of what the wedding clip did.
-const SPACE_VIDEOS = {
-  'executive-hall': {
-    src: '/videos/executive-hall.mp4',
-    // Deliberately plain. Nobody on this side has watched the clip, and a
-    // confident description of footage you have not seen is how alt text
-    // starts lying. Tighten it once someone has.
-    alt: 'A short clip of the Executive Hall',
-    width: 360,
-    height: 640,
-  },
-}
+// No space has footage any more. The Executive Hall's clip was here because it
+// was the only material that room had; the room is now photographed properly,
+// and a 360x640 frame off a messaging app is the weakest thing on that page
+// rather than the best. The file is still at /videos/executive-hall.mp4, so
+// putting it back is one entry in this object.
+const SPACE_VIDEOS = {}
 
 // The clip for a space, where there is one.
 export const spaceVideo = (slug) => SPACE_VIDEOS[slug] || null
@@ -161,30 +187,42 @@ const CARD_LADDER = { avif: [480, 760, 1100], webp: [480, 760, 1100] }
 
 // NEVER REGENERATE ONE OF THESE UNDER ITS OWN NAME. A file under /hero is
 // served straight off disk by LiteSpeed, and a browser that already holds the
-// old bytes keeps showing them: the four cards below were swapped for the
-// client's own photographs and carried on displaying stock, because the URL
-// had not moved. Every name here changed with its picture, and the next swap
-// has to change it again.
+// old bytes keeps showing them: four cards were once swapped for the client's
+// own photographs and carried on displaying stock, because the URL had not
+// moved. Every name here changed with its picture, and the next swap has to
+// change it again.
 const SPACE_CARDS = {
-  // Not a slice of the aerial. This one was taken standing on the grass, which
-  // is the shot the aerial was standing in for, and upright it needs no crop
-  // worth the name. The banner on /facilities is still the aerial: that frame
-  // carries the size of the place, this one carries what it is like to be in
-  // it, and they are doing different jobs.
-  //
-  // 608x1080 through a messaging app, so the ladder stops at its own width
-  // rather than advertising a tier that would be an upscale.
+  // The same traveller's palm as the card it replaces, re-shot properly. The
+  // phone version had power lines across the sky and the compound wall behind
+  // it and stopped at 608px; this one is off the camera and crops to 2330px of
+  // palm.
   garden: picture(
-    'card-garden-palm',
+    'card-garden-traveller',
     'A traveller’s palm at the edge of the lawn',
-    Infinity,
-    { avif: [480, 608], webp: [480, 608] },
+    1100,
+    CARD_LADDER,
   ),
-  auditorium: picture('card-auditorium-hall', 'The auditorium seen across the lawn', 1100, CARD_LADDER),
-  // Stops at 760: the source is 960px wide, and the card is never rendered
-  // wider than about 340, so 760 already covers a 2x screen.
-  'executive-hall': picture('card-hall-interior', 'The Executive Hall, blinds fitted along two walls', 760, CARD_LADDER),
-  terrace: picture('card-terrace-pavilion', 'The terrace under its curved roof', 1100, CARD_LADDER),
+  auditorium: picture(
+    'card-auditorium-hall',
+    'The auditorium seen across the lawn',
+    1100,
+    CARD_LADDER,
+  ),
+  // Cropped up off the floor. A full-height 4:5 box out of this frame was more
+  // than half black marble, which read as a dark empty room rather than a hall;
+  // this keeps the doorway, the ceiling line and the reflection.
+  'executive-hall': picture(
+    'card-hall-room',
+    'The Executive Hall, its doorway reflected in a polished dark floor',
+    1100,
+    CARD_LADDER,
+  ),
+  terrace: picture(
+    'card-terrace-pavilion',
+    'The terrace under its curved roof',
+    1100,
+    CARD_LADDER,
+  ),
 }
 
 export const spaceCard = (slug) => SPACE_CARDS[slug]
@@ -195,9 +233,7 @@ export const spaceGallery = (slug) => SPACE_PICTURES[slug] || []
 // The one that represents the space wherever only one will fit.
 export const spaceImage = (slug) => SPACE_PICTURES[slug][0]
 
-// The banner on /catering. Same source as the Executive Hall's picture, cropped
-// tight on the laid tables so it reads as the meal rather than as the room —
-// reusing a frame is only cheap when it is the same frame. Source crop is
+// The banner on /catering. Stock, and one of the three left. Source crop is
 // 2025px wide, so the ladder stops at 2000.
 export const cateringBanner = picture(
   'catering-table',
@@ -205,10 +241,10 @@ export const cateringBanner = picture(
   2000,
 )
 
-// The banner on /beverages, and the tall glass that sits beside the list. The
-// glass keeps its 2:3 crop — the drink fills the frame top to bottom, and
-// squaring it off to match every other picture on the site would cut the glass
-// in half to no purpose. Both stop at the widths generated for them.
+// The banner on /beverages, and the tall glass that sits beside the list. Both
+// stock. The glass keeps its 2:3 crop — the drink fills the frame top to
+// bottom, and squaring it off to match every other picture on the site would
+// cut the glass in half to no purpose.
 export const beveragesBanner = picture(
   'drinks-banner',
   'A tall pineapple drink garnished with fruit, beside a whole pineapple',
@@ -220,8 +256,8 @@ export const beveragesGlass = picture(
   1400,
 )
 
-// The banner on /floral. Theirs now, not stock — a bridal bouquet they made,
-// sent 2026-08-28. The stock bed of flowers it replaces is gone.
+// The banner on /floral. Theirs, not stock — a bridal bouquet they made, sent
+// 2026-08-28.
 //
 // SOFT ON DESKTOP, KNOWINGLY. The source is 540x960: a WhatsApp-compressed
 // phone frame, and WhatsApp is where the compression happened, not the camera.
@@ -230,10 +266,10 @@ export const beveragesGlass = picture(
 // again. Baby's breath is the worst subject there is for that — it is all
 // high-frequency detail, and upscaling turns it to porridge.
 //
-// It is shipped anyway because a real bouquet of theirs beats a stock bed of
-// gerberas, which is the whole point the client has been making. Ask them for
-// the original off the phone (it will be 3000px+) and regenerate these four
-// files at the shared ladder; nothing else has to change.
+// The 2026-09-12 shoot did not cover the floral work, so this is one of the few
+// pictures that did not get the upgrade the rest of the site did. Ask for the
+// originals off the phone (they will be 3000px+) and regenerate these four
+// files at the shared ladder.
 //
 // Cropped square, at 540x540 off the middle: the page hero is full bleed and
 // object-fit covers it, so a square sits between what a phone crops to
@@ -246,9 +282,7 @@ export const floralBanner = picture(
   { avif: [540, 1080], webp: [540, 1080] },
 )
 
-// The venue's own arrangement, photographed by them and sent 2026-08-27. The
-// only genuine Gig Cottage photograph on the site — everything else here is
-// stock standing in.
+// The venue's own arrangement, photographed by them and sent 2026-08-27.
 //
 // Cropped hard, and that is the whole story of it. The source is a 1280px
 // phone frame with a yellow chair, floor tiles and a set of car keys around

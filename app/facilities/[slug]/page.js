@@ -61,9 +61,10 @@ export default function FacilityPage({ params }) {
         </div>
 
         <div className="gc-detail-media">
-          {/* A space with footage shows the footage and nothing else. Only the
-              Executive Hall has any, and the client asked for the clip alone
-              rather than the clip beside a still of the same room. */}
+          {/* A space with footage shows the footage and nothing else. No space
+              has any today: the Executive Hall's clip came off when the room
+              was photographed properly on 2026-09-12. The branch stays because
+              the rule still holds if a clip comes back. */}
           {spaceVideo(space.slug) ? (
             <FacilityVideo video={spaceVideo(space.slug)} />
           ) : (
