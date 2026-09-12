@@ -3,10 +3,9 @@ import Link from 'next/link'
 import SiteHeader from '../../components/SiteHeader'
 import SiteFooter from '../../components/SiteFooter'
 import FacilityGallery from '../../components/FacilityGallery'
-import FacilityVideo from '../../components/FacilityVideo'
 import EnquiryForm from '../../components/EnquiryForm'
 import { SPACES, spacePath } from '../../lib/content'
-import { spaceGallery, spaceVideo } from '../../lib/media'
+import { spaceGallery } from '../../lib/media'
 
 // The reading end of a facility. The rail on /facilities carries one picture
 // and the name; everything that has to be read rather than glanced at is here.
@@ -61,15 +60,11 @@ export default function FacilityPage({ params }) {
         </div>
 
         <div className="gc-detail-media">
-          {/* A space with footage shows the footage and nothing else. No space
-              has any today: the Executive Hall's clip came off when the room
-              was photographed properly on 2026-09-12. The branch stays because
-              the rule still holds if a clip comes back. */}
-          {spaceVideo(space.slug) ? (
-            <FacilityVideo video={spaceVideo(space.slug)} />
-          ) : (
-            <FacilityGallery pictures={spaceGallery(space.slug)} name={space.name} />
-          )}
+          {/* The Executive Hall's clip came off on 2026-09-12, when the room
+              was photographed properly. It was the only footage on the site, so
+              the branch that chose between a clip and a gallery went with it.
+              FacilityVideo is still in components if a clip ever comes back. */}
+          <FacilityGallery pictures={spaceGallery(space.slug)} name={space.name} />
         </div>
 
         <div className="gc-detail-body">

@@ -2181,71 +2181,97 @@ html { scroll-behavior: smooth; }
 .gc-legal-body a:hover { border-bottom-color: var(--gc-gold); }
 
 /* --------------------------------------------------------------- gallery -- */
-.gc-gal { position: relative; }
+/* A justified grid. Every picture keeps the shape it was taken at, rows fill
+   the width, and the row heights differ because the pictures do.
 
-/* The whole frame is the control that opens the lightbox, so it is a button —
-   but a button that has to look like nothing at all. */
-.gc-gal-view {
+   The whole layout is three declarations on the cell, all driven by --gc-r,
+   the picture's own ratio, set inline per item:
+
+     flex-basis  = ratio x a target row height    its share of the row
+     flex-grow   = ratio                          how it spends the remainder
+     aspect-ratio= ratio                          the shape, once it lands
+
+   Both the share and the growth scale with the ratio, so every cell that ends
+   up in the same row resolves to the same height without anything being
+   measured in JavaScript. A wide frame simply takes more of the row than a
+   3:2 one, which is what separates this from a table of equal boxes.
+
+   --gc-row is the target height, and the only number worth tuning. It is set
+   so the widest container, 1320px less its padding, takes three 16:9 frames to
+   the row rather than two: 3 x (1.778 x 215) plus two gaps is 1174, inside the
+   1192 available. Raise it and the rows drop to two, which turns the garden’s
+   nine pictures into five. */
+.gc-grid {
+  --gc-row: clamp(160px, 16vw, 215px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(8px, 1vw, 14px);
+}
+
+/* Soaks up the slack on the last row so a lone picture keeps its own size
+   instead of stretching to the full width. Without it, a set of 7 ends with
+   one frame blown up to four times the others. */
+.gc-grid::after {
+  content: '';
+  flex-grow: 999999;
+}
+
+.gc-grid-item {
+  flex-grow: var(--gc-r);
+  flex-basis: calc(var(--gc-r) * var(--gc-row));
+  min-width: 0;
+}
+
+/* The frame is the control that opens the lightbox, so it is a button, but a
+   button that has to look like nothing at all. */
+.gc-grid-btn {
   appearance: none;
   display: block;
   width: 100%;
+  aspect-ratio: var(--gc-r);
+  margin: 0;
   padding: 0;
   border: 0;
   background: var(--gc-bone-2);
   position: relative;
   overflow: hidden;
   cursor: zoom-in;
-  touch-action: pan-y;
 }
 
-.gc-gal--single .gc-gal-view { cursor: zoom-in; }
+.gc-grid-btn picture { display: contents; }
 
-.gc-gal-track {
-  display: flex;
-  transition: transform 1.05s var(--gc-ease-soft);
-}
-
-/* No height cap, for the reason spelled out on .gc-slide: against a fixed
-   aspect-ratio a max-height widens the box past 16:9 and object-fit takes the
-   difference off the top and bottom of the picture. This was the second half
-   of why the terrace looked zoomed in. */
-.gc-gal-cell {
-  flex: 0 0 100%;
-  aspect-ratio: 16 / 9;
-}
-
-.gc-gal-cell picture { display: contents; }
-
-.gc-gal-cell img {
+/* object-fit still says cover, and it is now a no-op in the ordinary case: the
+   box is the picture's own ratio, so there is nothing to cut. It stays as the
+   guard for the half-pixel a browser rounds off at an awkward width. */
+.gc-grid-btn img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: opacity .18s ease-out;
 }
 
-/* Sits in the corner, dark enough to read on any frame without a scrim over
-   the whole picture. Appears on hover on a mouse; always visible on touch,
-   where there is no hover to discover it with. */
-.gc-gal-hint {
+/* One corner mark rather than a label on every frame. Nine cells each carrying
+   the words "View full size" would be the loudest thing on the page. */
+.gc-grid-zoom {
   position: absolute;
-  right: clamp(12px, 1.6vw, 20px);
-  top: clamp(12px, 1.6vw, 20px);
+  right: 10px;
+  bottom: 10px;
   z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 14px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
   background: rgba(18, 16, 14, .62);
   color: var(--gc-bone);
-  font-family: var(--font-montserrat), var(--gc-sans);
-  font-weight: 500;
-  font-size: 11px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  transition: opacity .35s ease, background .35s ease;
+  opacity: 0;
+  transition: opacity .18s ease-out;
 }
 
-.gc-gal-hint svg {
+.gc-grid-zoom svg {
   width: 14px;
   height: 14px;
   fill: none;
@@ -2255,70 +2281,26 @@ html { scroll-behavior: smooth; }
   stroke-linejoin: round;
 }
 
+/* Always visible on touch, where there is no hover to discover it with. */
 @media (hover: hover) {
-  .gc-gal-hint { opacity: 0; }
-  .gc-gal-view:hover .gc-gal-hint,
-  .gc-gal-view:focus-visible .gc-gal-hint { opacity: 1; }
+  .gc-grid-btn:hover img,
+  .gc-grid-btn:focus-visible img { opacity: .88; }
+
+  .gc-grid-btn:hover .gc-grid-zoom,
+  .gc-grid-btn:focus-visible .gc-grid-zoom { opacity: 1; }
 }
 
-.gc-gal-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding-top: clamp(14px, 1.8vw, 20px);
+@media (hover: none) {
+  .gc-grid-zoom { opacity: 1; }
 }
 
-.gc-gal-dots { display: flex; gap: 10px; }
-
-.gc-gal-dot {
-  appearance: none;
-  background: none;
-  border: 0;
-  padding: 8px 0;
-  cursor: pointer;
-  width: 40px;
-}
-
-.gc-gal-dot i {
-  display: block;
-  height: 1px;
-  background: var(--gc-hairline);
-  transition: background .35s ease;
-}
-
-.gc-gal-dot.is-on i { background: var(--gc-gold); }
-.gc-gal-dot:hover i { background: var(--gc-oxblood); }
-
-.gc-gal-nav {
-  display: flex;
-  align-items: center;
-  gap: clamp(10px, 1.4vw, 16px);
-}
-
-@media (max-width: 720px) {
-  .gc-gal-bar { gap: 12px; }
-  .gc-gal-nav { margin-left: auto; }
-  .gc-gal-count { display: none; }
-}
-
-.gc-gal-count {
-  font-family: var(--font-montserrat), var(--gc-sans);
-  font-weight: 500;
-  font-size: clamp(11px, .95vw, 12px);
-  letter-spacing: .18em;
-  font-variant-numeric: tabular-nums;
-  color: var(--gc-ink-soft);
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.gc-gal-count i {
-  width: 22px;
-  height: 1px;
-  background: var(--gc-hairline);
-  display: block;
+/* A phone is too narrow to justify anything. Below 680px the row target drops
+   to the full width, so every picture stacks at its own height and none of
+   them ends up a letterbox strip 90px tall. */
+@media (max-width: 680px) {
+  .gc-grid { --gc-row: 100vw; }
+  .gc-grid::after { display: none; }
+  .gc-grid-item { flex-basis: 100%; }
 }
 
 /* -------------------------------------------------------------- lightbox -- */
@@ -2831,7 +2813,7 @@ html { scroll-behavior: smooth; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gc-gal-track { transition: none; }
+  .gc-grid-btn img { transition: none; }
   .gc-lightbox,
   .gc-modal,
   .gc-enq-form { animation: none; }

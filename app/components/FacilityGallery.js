@@ -2,16 +2,31 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-// The pictures for one space: a frame you cycle, and a lightbox you open to see
-// any of them properly.
+// Every picture of one space, laid out as a justified grid, and a lightbox you
+// open to see any of them properly.
 //
-// No captions. Each picture is the same room from another angle, so a line of
-// text under every one would be four ways of writing "the garden" — the space's
+// It used to be a carousel: one 16:9 cell you cycled with dots and arrows. Two
+// things killed it. The sets are 3 to 9 pictures now rather than the 1 they
+// were built for, and a carousel hides all but one of those behind a click
+// nobody makes. And every picture had to be cut to the cell's shape to fit,
+// which took a band off the top and bottom of everything shot at 3:2.
+//
+// So the grid takes each picture at the shape it was taken. Rows fill the
+// width, every picture in a row shares a height, and the row heights differ.
+// That is the whole layout, and it is done in CSS with no measuring:
+//
+//   flex-basis: calc(ratio * a row height)   sets each cell's share of the row
+//   flex-grow:  ratio                        spends the remainder in proportion
+//   aspect-ratio: ratio                      holds the shape once it lands
+//
+// Because both the basis and the growth are proportional to the ratio, every
+// cell that lands in the same row resolves to the same height. Wide pictures
+// take more width than tall ones, which is what makes it read as justified
+// rather than as a table.
+//
+// No captions. Each picture is the same place from another angle, so a line of
+// text under every one would be nine ways of writing "the garden" — the space's
 // name is already at the top of the page.
-//
-// A set of one renders as a plain picture with no controls. That is a real
-// state here, not a degenerate one: two of the four spaces genuinely have a
-// single honest photograph so far.
 
 const Chevron = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -19,7 +34,9 @@ const Chevron = () => (
   </svg>
 )
 
-const SIZES = '(min-width: 1400px) 1320px, 100vw'
+// A cell is never wider than about 650px, and most land near 400.
+const CELL_SIZES = '(min-width: 900px) 42vw, (min-width: 600px) 46vw, 92vw'
+const FULL_SIZES = '(min-width: 1400px) 1320px, 100vw'
 
 function Frame({ picture, sizes, priority = false, full = false }) {
   return (
@@ -98,11 +115,9 @@ export default function FacilityGallery({ pictures, name }) {
   /* ----------------------------------------------------------------- swipe */
 
   const pointer = useRef(null)
-  const moved = useRef(false)
 
   const onPointerDown = (e) => {
     pointer.current = { x: e.clientX, y: e.clientY }
-    moved.current = false
   }
 
   const onPointerUp = (e) => {
@@ -111,97 +126,41 @@ export default function FacilityGallery({ pictures, name }) {
     if (!start) return
     const dx = e.clientX - start.x
     const dy = e.clientY - start.y
-    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) {
-      // Flagged so the click that follows a swipe does not also open the
-      // lightbox — a throw and a tap are different intentions.
-      moved.current = true
-      go(index + (dx < 0 ? 1 : -1))
-    }
+    if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) go(index + (dx < 0 ? 1 : -1))
   }
 
-  const single = count === 1
+  const current = pictures[index]
 
   return (
     <>
-      <div className={`gc-gal${single ? ' gc-gal--single' : ''}`}>
-        <button
-          type="button"
-          className="gc-gal-view"
-          aria-label={`View ${name} pictures full size`}
-          onClick={() => {
-            if (!moved.current) openAt(index)
-          }}
-          onPointerDown={onPointerDown}
-          onPointerUp={onPointerUp}
-          onPointerCancel={() => {
-            pointer.current = null
-          }}
-        >
-          <div
-            className="gc-gal-track"
-            style={{ transform: `translate3d(-${index * 100}%, 0, 0)` }}
+      <ul className="gc-grid">
+        {pictures.map((picture, i) => (
+          <li
+            className="gc-grid-item"
+            key={picture.src}
+            style={{ '--gc-r': picture.ratio }}
           >
-            {pictures.map((picture, i) => (
-              <div className="gc-gal-cell" key={picture.src} aria-hidden={i !== index}>
-                <Frame picture={picture} sizes={SIZES} priority={i === 0} />
-              </div>
-            ))}
-          </div>
-
-          <span className="gc-gal-hint" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M4 9V4h5" />
-              <path d="M20 9V4h-5" />
-              <path d="M4 15v5h5" />
-              <path d="M20 15v5h-5" />
-            </svg>
-            View full size
-          </span>
-        </button>
-
-        {!single && (
-          <div className="gc-gal-bar">
-            <div className="gc-gal-dots">
-              {pictures.map((picture, i) => (
-                <button
-                  key={picture.src}
-                  type="button"
-                  className={`gc-gal-dot${i === index ? ' is-on' : ''}`}
-                  aria-label={`Show picture ${i + 1} of ${count}`}
-                  aria-current={i === index}
-                  onClick={() => go(i)}
-                >
-                  <i />
-                </button>
-              ))}
-            </div>
-
-            <div className="gc-gal-nav">
-              <span className="gc-gal-count" aria-hidden="true">
-                {String(index + 1).padStart(2, '0')}
-                <i />
-                {String(count).padStart(2, '0')}
+            <button
+              type="button"
+              className="gc-grid-btn"
+              aria-label={`View picture ${i + 1} of ${count} full size`}
+              onClick={() => openAt(i)}
+            >
+              {/* The first is the page's largest picture above the fold, so it
+                  loads eagerly; the rest wait until they are scrolled to. */}
+              <Frame picture={picture} sizes={CELL_SIZES} priority={i === 0} />
+              <span className="gc-grid-zoom" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 9V4h5" />
+                  <path d="M20 9V4h-5" />
+                  <path d="M4 15v5h5" />
+                  <path d="M20 15v5h-5" />
+                </svg>
               </span>
-              <button
-                type="button"
-                className="gc-rail-arrow gc-rail-arrow--prev"
-                aria-label="Previous picture"
-                onClick={() => go(index - 1)}
-              >
-                <Chevron />
-              </button>
-              <button
-                type="button"
-                className="gc-rail-arrow"
-                aria-label="Next picture"
-                onClick={() => go(index + 1)}
-              >
-                <Chevron />
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+            </button>
+          </li>
+        ))}
+      </ul>
 
       {open && (
         <div
@@ -209,23 +168,27 @@ export default function FacilityGallery({ pictures, name }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${name} pictures`}
-          onClick={(e) => {
-            // Only the backdrop closes. Clicking the picture itself should not.
-            if (e.target === e.currentTarget) close()
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          onPointerCancel={() => {
+            pointer.current = null
           }}
         >
           <button
             type="button"
             className="gc-lightbox-close"
+            aria-label="Close"
             ref={closeRef}
             onClick={close}
           >
-            Close
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
           </button>
 
-          <figure className="gc-lightbox-stage">
-            <Frame picture={pictures[index]} sizes="100vw" priority full />
-          </figure>
+          <div className="gc-lightbox-stage">
+            <Frame picture={current} sizes={FULL_SIZES} priority full />
+          </div>
 
           {count > 1 && (
             <div className="gc-lightbox-bar">
@@ -237,11 +200,13 @@ export default function FacilityGallery({ pictures, name }) {
               >
                 <Chevron />
               </button>
-              <span className="gc-lightbox-count">
+
+              <span className="gc-lightbox-count" aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
                 <i />
                 {String(count).padStart(2, '0')}
               </span>
+
               <button
                 type="button"
                 className="gc-lightbox-arrow"
