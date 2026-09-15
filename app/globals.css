@@ -1290,36 +1290,6 @@ html { scroll-behavior: smooth; }
   aspect-ratio: 16 / 9;
 }
 
-/* On a phone 16:9 is only about 220px tall and the caption wants more than
-   that on its own — the auditorium's name alone takes two lines, then the
-   figure, three of note and a button. The old answer was a 4:5 box, which
-   bought the caption its room by cropping the sides off the photograph.
-
-   So the caption comes off the picture instead and sits under it on its own
-   ground. The picture keeps its whole frame, the words keep their space, and
-   nothing has to be cut to make them share. */
-@media (max-width: 619px) {
-  .gc-slide {
-    aspect-ratio: auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .gc-slide img {
-    aspect-ratio: 16 / 9;
-    height: auto;
-  }
-
-  /* There is no longer a picture under the words to shade. */
-  .gc-slide::after { display: none; }
-
-  .gc-slide-cap {
-    position: static;
-    flex: 1;
-    background: var(--gc-oxblood-deep);
-  }
-}
-
 .gc-slide picture { display: contents; }
 
 .gc-slide img {
@@ -1468,6 +1438,44 @@ html { scroll-behavior: smooth; }
 }
 
 .gc-slide-cta:hover svg { transform: translateX(4px); }
+
+/* On a phone 16:9 is only about 220px tall and the caption wants more than
+   that on its own — the auditorium's name alone takes two lines, then the
+   figure, three of note and a button. The old answer was a 4:5 box, which
+   bought the caption its room by cropping the sides off the photograph.
+
+   So the caption comes off the picture instead and sits under it on its own
+   ground. The picture keeps its whole frame, the words keep their space, and
+   nothing has to be cut to make them share.
+
+   THIS BLOCK HAS TO STAY BELOW .gc-slide img AND .gc-slide-cap. Its
+   selectors weigh the same as theirs, so whichever comes later wins. It sat
+   above them from 2026-09-09 to 2026-09-15, and in that week the base rule's
+   position: absolute beat the static here: the caption, with its solid
+   oxblood ground, was laid over the picture instead of under it, and taller
+   than it, so every slide on a phone showed a brown box and no photograph. */
+@media (max-width: 619px) {
+  .gc-slide {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gc-slide img {
+    flex: none;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  /* There is no longer a picture under the words to shade. */
+  .gc-slide::after { display: none; }
+
+  .gc-slide-cap {
+    position: static;
+    flex: 1;
+    background: var(--gc-oxblood-deep);
+  }
+}
 
 /* -------------------------------------------------------------- rail bar -- */
 .gc-rail-bar {
