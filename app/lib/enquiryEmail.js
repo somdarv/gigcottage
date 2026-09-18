@@ -61,10 +61,13 @@ function button(href, text, filled) {
 }
 
 export function enquiryHtml(data) {
-  const { space, name, dates, occasion, guests, phone, email, notes } = data
+  const { space, name, dates, menu, occasion, guests, phone, email, notes } = data
 
-  const rows = [row('Space', esc(space)), row('Name', esc(name)), row('Dates', esc(dates))]
+  // "About" rather than "Space": a staff party booking comes through here as
+  // well, and it is not a space.
+  const rows = [row('About', esc(space)), row('Name', esc(name)), row('Dates', esc(dates))]
 
+  if (menu) rows.push(row('Menu', esc(menu)))
   if (occasion) rows.push(row('Occasion', esc(occasion)))
   if (guests) rows.push(row('Guests', `about ${esc(guests)}`))
 

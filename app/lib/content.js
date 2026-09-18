@@ -252,6 +252,69 @@ export const FLORAL = {
   ],
 }
 
+// The year-end staff party offer, from the client's own flyer (2026-09-18).
+//
+// The one place on the site that shows a price. The rule at the top of this
+// file is about hire and the buffet menu, which are still quoted by enquiry.
+// This is a fixed offer at a fixed price, so the price is the offer.
+//
+// The wording is the flyer's, heading and lead included. The flyer does not
+// say whether the price is per guest, so the site does not say either.
+//
+// `until` is a date, not a flag. The home page section and the notice both
+// check it, so the offer comes off on its own and nobody has to remember to
+// pull it in January.
+export const STAFF_PARTY = {
+  until: '2026-12-31',
+  heading: 'This year should not end without a staff party',
+  lead: 'With Gig Cottage, it is doable this year end.',
+  whatsapp: 'Hello Gig Cottage, I would like to book a staff party.',
+  packages: [
+    {
+      name: 'BBQ Package',
+      price: 95,
+      summary: 'Beef kebab, fried yam, juice and water',
+      groups: [
+        {
+          items: [
+            '2 sticks of beef kebab',
+            'Fried yam with green sauce',
+            '2 glasses of freshly squeezed juice',
+            '2 bottles of water',
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Food Platter',
+      price: 125,
+      summary: 'Samosa, main meals with extras, juice and water',
+      groups: [
+        { name: 'Starter', items: ['Samosa'] },
+        {
+          name: 'Main meals with extras',
+          items: [
+            'Vermicelli rice with goat stew and Ghanaian salad',
+            'Abolo or banku with grilled tilapia and green sauce',
+          ],
+        },
+        {
+          name: 'Drinks',
+          items: ['2 glasses of freshly squeezed juice', '2 bottles of water'],
+        },
+      ],
+    },
+  ],
+}
+
+// True until the end of the offer's last day. Built from parts for the same
+// reason as the enquiry form's dates: `new Date('2026-12-31')` is UTC
+// midnight, which is the evening of the 30th anywhere west of Greenwich.
+export function offerRunning(offer, now = new Date()) {
+  const [y, m, d] = offer.until.split('-').map(Number)
+  return now < new Date(y, m - 1, d + 1)
+}
+
 const DEFAULT_ENQUIRY =
   'Hello Gig Cottage, I would like to enquire about booking a space.'
 

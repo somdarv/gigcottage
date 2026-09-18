@@ -757,6 +757,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* The header is fixed, so anchored jumps have to clear it. */
+.gc-party,
 .gc-place,
 .gc-services,
 .gc-cards,
@@ -795,6 +796,284 @@ html { scroll-behavior: smooth; }
   line-height: 1.72;
   color: var(--gc-ink-soft);
   max-width: 52ch;
+}
+
+/* ----------------------------------------------------------- staff party -- */
+/* The year-end offer, straight under the hero. Oxblood, where everything
+   else between the hero and the footer is bone, because it is the one thing
+   on the page that will not be here in January and it should look it. The
+   flyer it comes from is a red poster; this is the site's own red. */
+.gc-party {
+  background: var(--gc-oxblood);
+  color: var(--gc-bone);
+  padding: clamp(72px, 10vw, 140px) var(--gc-pad);
+}
+
+.gc-party-body {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(44px, 7vw, 64px);
+}
+
+/* Heading and booking share the left column and the menus take the right,
+   wider one. The source order is head, menus, booking, which is the reading
+   order on a phone; the grid lifts the booking up beside the menus here. */
+@media (min-width: 960px) {
+  .gc-party-body {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(56px, 7vw, 120px);
+    row-gap: clamp(32px, 3.4vw, 44px);
+  }
+
+  .gc-party-head { grid-column: 1; grid-row: 1; }
+  .gc-party-actions { grid-column: 1; grid-row: 2; align-self: start; }
+  .gc-party-menus { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+.gc-party-title {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(2.1rem, 4.6vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -.022em;
+  text-wrap: balance;
+  max-width: 13ch;
+  color: #fefdfb;
+}
+
+/* Focused by script only, to land a keyboard user; a ring round a heading
+   would read as a fault. */
+.gc-party-title:focus { outline: none; }
+
+.gc-party-lead {
+  margin: clamp(16px, 2vw, 22px) 0 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  line-height: 1.55;
+  color: rgba(253, 251, 248, .76);
+  max-width: 34ch;
+}
+
+.gc-party-actions,
+.gc-promo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+}
+
+/* The gold button's own hover turns it oxblood, which on this ground makes
+   it disappear. Bone instead. */
+.gc-party .gc-btn--gold:hover:not(:disabled),
+.gc-promo .gc-btn--gold:hover:not(:disabled) {
+  background: var(--gc-bone);
+  border-color: var(--gc-bone);
+  color: var(--gc-oxblood);
+}
+
+/* The quieter way in, beside the button: a word with a rule under it. */
+.gc-party-alt {
+  font-family: var(--font-montserrat), var(--gc-sans);
+  font-weight: 500;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(253, 251, 248, .86);
+  text-decoration: none;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--gc-hairline-bone);
+  transition: color .2s ease-out, border-color .2s ease-out;
+}
+
+.gc-party-alt:hover {
+  color: var(--gc-gold);
+  border-bottom-color: var(--gc-gold);
+}
+
+.gc-party-menus {
+  display: grid;
+  gap: clamp(44px, 5vw, 64px);
+}
+
+.gc-pkg-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: clamp(12px, 1.4vw, 16px);
+  margin-bottom: clamp(18px, 2.2vw, 26px);
+  border-bottom: 1px solid var(--gc-hairline-bone);
+}
+
+.gc-pkg-name {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.4rem, 2.3vw, 1.9rem);
+  line-height: 1.15;
+  letter-spacing: -.012em;
+  color: #fefdfb;
+}
+
+/* The price is the offer, so it is the largest thing in the list and bigger
+   than the name it belongs to. */
+.gc-pkg-price {
+  margin: 0;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: .3em;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  line-height: 1;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+  color: #fefdfb;
+}
+
+.gc-pkg-cur {
+  padding-top: .3em;
+  font-family: var(--gc-sans);
+  font-weight: 600;
+  font-size: .3em;
+  letter-spacing: .2em;
+  color: var(--gc-gold);
+}
+
+.gc-pkg-groups {
+  display: grid;
+  gap: clamp(20px, 2.6vw, 28px) clamp(24px, 3vw, 40px);
+}
+
+/* The platter's three courses side by side once there is room, with the
+   mains given the width their long lines need. */
+@media (min-width: 640px) {
+  .gc-pkg-groups--cols {
+    grid-template-columns: minmax(0, .8fr) minmax(0, 2fr) minmax(0, 1.3fr);
+  }
+}
+
+.gc-pkg-group {
+  margin: 0 0 10px;
+  font-family: var(--gc-serif);
+  font-weight: 500;
+  font-size: clamp(.98rem, 1.3vw, 1.06rem);
+  line-height: 1.3;
+  color: #fefdfb;
+}
+
+.gc-party .gc-space-list {
+  font-size: clamp(1rem, 1.3vw, 1.08rem);
+  color: rgba(253, 251, 248, .78);
+}
+
+/* ---------------------------------------------------- staff party notice -- */
+/* The same offer as a dialog on the first visit, on the same ground as the
+   section so the two read as one thing. Centred, unlike the enquiry form: it
+   is short, and the form is not. */
+.gc-promo {
+  align-self: center;
+  width: min(540px, 100%);
+  background: var(--gc-oxblood);
+  color: var(--gc-bone);
+  padding: clamp(22px, 3.6vw, 44px);
+  display: grid;
+  animation: gc-promo-in .2s ease-out both;
+}
+
+@keyframes gc-promo-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.gc-promo:focus { outline: none; }
+
+.gc-promo .gc-modal-close { color: rgba(253, 251, 248, .7); }
+.gc-promo .gc-modal-close:hover { color: var(--gc-gold); }
+
+.gc-promo-title {
+  margin: clamp(6px, 1vw, 10px) 0 0;
+  font-family: var(--gc-serif);
+  font-weight: 300;
+  font-size: clamp(1.9rem, 4.6vw, 2.7rem);
+  line-height: 1.06;
+  letter-spacing: -.02em;
+  text-wrap: balance;
+  max-width: 14ch;
+  color: #fefdfb;
+}
+
+.gc-promo-lead {
+  margin: 14px 0 0;
+  font-family: var(--gc-serif);
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.5;
+  color: rgba(253, 251, 248, .76);
+}
+
+.gc-promo-pkgs {
+  list-style: none;
+  margin: clamp(24px, 3.4vw, 32px) 0 clamp(26px, 3.6vw, 34px);
+  padding: 0;
+  border-top: 1px solid var(--gc-hairline-bone);
+}
+
+.gc-promo-pkgs li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 20px;
+  padding: clamp(14px, 2vw, 18px) 0;
+  border-bottom: 1px solid var(--gc-hairline-bone);
+}
+
+/* Every item placed by column, not just the price. A grid places an item with
+   a fixed row before the ones without, so a price given only its rows took
+   the first column and pushed the name across. */
+.gc-promo-pkgs .gc-pkg-price {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-size: clamp(1.9rem, 4.4vw, 2.4rem);
+}
+
+.gc-promo-name,
+.gc-promo-sum { grid-column: 1; }
+
+.gc-promo-name {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2vw, 1.3rem);
+  line-height: 1.2;
+  color: #fefdfb;
+}
+
+.gc-promo-sum {
+  margin: 0;
+  font-family: var(--gc-serif);
+  font-size: .95rem;
+  line-height: 1.45;
+  color: rgba(253, 251, 248, .7);
+}
+
+@media (max-width: 599px) {
+  .gc-party-actions .gc-btn,
+  .gc-promo-actions .gc-btn { width: 100%; }
+
+  .gc-party-actions,
+  .gc-promo-actions { justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-promo { animation: none; }
+  .gc-party-alt { transition: none; }
 }
 
 /* ---------------------------------------------------------- service tiles -- */
@@ -2480,6 +2759,10 @@ html { scroll-behavior: smooth; }
   padding: clamp(16px, 4vw, 56px) clamp(14px, 3vw, 32px);
   animation: gc-fade-in .3s ease both;
 }
+
+/* A closed dialog stays in the page so its form keeps what was typed, and
+   the display above would otherwise beat the hidden attribute. */
+.gc-modal[hidden] { display: none; }
 
 .gc-modal-close {
   appearance: none;
