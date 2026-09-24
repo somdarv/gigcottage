@@ -35,7 +35,7 @@ export default function FindUs() {
           Find us
         </h2>
         <p className="gc-sec-lead" data-gc-reveal>
-          On the Adenta-Dodowa Road at Malejor, with spacious enclosed parking
+          On the Adenta-Dodowa Road at Malejor, with enclosed parking for 200 cars
           on site.
         </p>
       </div>

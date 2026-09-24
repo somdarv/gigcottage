@@ -8,6 +8,10 @@
 // (2026-08-28). The number is unchanged and still the rate card's; only the
 // word above it moved, so `guests` is what the field is called too.
 //
+// The one figure not off a rate card is the parking: 200 cars, given on
+// 2026-09-24. The cards say only "spacious". It reads the same way on The
+// Place and on Find us, so all five say 200.
+//
 // And no thousands comma on any of them, hers too: 2000, not 2,000. The
 // figures are strings for that reason — nothing formats them, so nothing can
 // put the comma back.
@@ -67,7 +71,7 @@ export const SPACES = [
       'Expansive landscaped garden',
       'Beautiful trees and greenery',
       'Outdoor mist fans',
-      'Spacious enclosed parking',
+      'Enclosed parking for 200 cars',
       'Backup generator',
       'Security',
     ],
@@ -91,7 +95,7 @@ export const SPACES = [
       'Large naturally ventilated auditorium',
       'Indoor fans',
       'Comfortable airflow, no air conditioning required',
-      'Spacious enclosed parking',
+      'Enclosed parking for 200 cars',
       'Backup generator',
     ],
     suitedFor: [
@@ -114,7 +118,7 @@ export const SPACES = [
       'Fully air-conditioned hall',
       'Private washrooms',
       'Enclosed indoor venue',
-      'Spacious parking',
+      'Parking for 200 cars',
       'Backup generator',
       'Security',
     ],
@@ -136,7 +140,7 @@ export const SPACES = [
       'Beautiful open-air terrace',
       'Scenic view of the garden',
       'Outdoor mist fans',
-      'Access to spacious parking',
+      'Access to parking for 200 cars',
       'Backup generator',
     ],
     suitedFor: [
@@ -261,9 +265,9 @@ export const FLORAL = {
 // The wording is the flyer's, heading and lead included. The flyer does not
 // say whether the price is per guest, so the site does not say either.
 //
-// `until` is a date, not a flag. The home page section and the notice both
-// check it, so the offer comes off on its own and nobody has to remember to
-// pull it in January.
+// `until` is a date, not a flag. The home page section checks it, so the
+// offer comes off on its own and nobody has to remember to pull it in
+// January.
 export const STAFF_PARTY = {
   until: '2026-12-31',
   heading: 'This year should not end without a staff party',
@@ -273,7 +277,6 @@ export const STAFF_PARTY = {
     {
       name: 'BBQ Package',
       price: 95,
-      summary: 'Beef kebab, fried yam, juice and water',
       groups: [
         {
           items: [
@@ -288,7 +291,6 @@ export const STAFF_PARTY = {
     {
       name: 'Food Platter',
       price: 125,
-      summary: 'Samosa, main meals with extras, juice and water',
       groups: [
         { name: 'Starter', items: ['Samosa'] },
         {

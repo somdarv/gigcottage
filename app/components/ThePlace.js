@@ -10,7 +10,8 @@ export default function ThePlace() {
         and a terrace.
       </p>
       <p className="gc-place-sub">
-        Standby generator, security and spacious enclosed parking across all of them.
+        Standby generator, security and enclosed parking for 200 cars across all of
+        them.
       </p>
 
     </section>
