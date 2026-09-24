@@ -15,10 +15,8 @@ import { createPortal } from 'react-dom'
 // What is inside stays mounted while it is closed, hidden rather than removed,
 // so a half-filled enquiry is still there when the visitor comes back to it.
 //
-// On opening, focus goes to whatever inside is marked data-autofocus, and
-// again whenever `step` changes. The staff party notice turns from the offer
-// into the form without closing, and that is how the form gets the caret.
-export default function Dialog({ open, label, onClose, step, children }) {
+// On opening, focus goes to whatever inside is marked data-autofocus.
+export default function Dialog({ open, label, onClose, children }) {
   const [mounted, setMounted] = useState(false)
   const root = useRef(null)
   const opener = useRef(null)
@@ -60,7 +58,7 @@ export default function Dialog({ open, label, onClose, step, children }) {
     if (!open || !root.current) return
     const target = root.current.querySelector('[data-autofocus]')
     if (target) target.focus()
-  }, [open, step, mounted])
+  }, [open, mounted])
 
   if (!mounted) return null
 

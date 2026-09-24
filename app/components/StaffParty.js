@@ -19,9 +19,7 @@ export default function StaffParty() {
     <section className="gc-party" id="staff-party" aria-labelledby="gc-party-title">
       <div className="gc-party-body" data-gc-reveal-group>
         <div className="gc-party-head">
-          {/* Focusable so the notice's "See both menus" can land a keyboard
-              user here and not back at the top of the page. */}
-          <h2 className="gc-party-title" id="gc-party-title" tabIndex={-1}>
+          <h2 className="gc-party-title" id="gc-party-title">
             {heading}
           </h2>
           <p className="gc-party-lead">{lead}</p>
