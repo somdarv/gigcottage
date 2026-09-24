@@ -85,7 +85,6 @@ export async function POST(request) {
         space: space || 'Facility',
         name,
         dates: flatten(body.dates),
-        menu: flatten(body.menu),
         occasion: flatten(body.occasion),
         guests: flatten(body.guests),
         phone: flatten(body.phone),
