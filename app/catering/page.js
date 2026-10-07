@@ -13,6 +13,7 @@ export const metadata = {
   title: 'Catering | Gig Cottage',
   description:
     'Buffet catering at Gig Cottage, Malejor. Goat stew, palava sauce, light soup, grilled tilapia, waakye and jollof, served with green sauce, shito and Ghanaian salad.',
+  alternates: { canonical: '/catering' },
 }
 
 export default function CateringPage() {

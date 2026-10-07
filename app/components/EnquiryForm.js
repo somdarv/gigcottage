@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { CONTACT } from '../lib/content'
+import { track } from '../lib/analytics'
 
 // The enquiry form.
 //
@@ -169,6 +170,9 @@ export default function EnquiryForm({ space }) {
         }),
       })
       setState(res.ok ? 'sent' : 'failed')
+      // Only an enquiry that actually reached the mailbox. The facility is
+      // the one thing sent: names, numbers and dates stay out of Google.
+      if (res.ok) track('enquiry_sent', { facility: space.shortName || space.name })
     } catch {
       setState('failed')
     }

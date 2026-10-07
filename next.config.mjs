@@ -30,6 +30,19 @@ const nextConfig = {
         destination: '/facilities/executive-hall',
         permanent: true,
       },
+      // www goes to the bare domain, path and query kept. Both hosts used to
+      // answer 200 with identical pages, and Google indexed the www copy of
+      // the home page in place of the real one (found 2026-10-07).
+      //
+      // Only pages reach Node. LiteSpeed serves /hero and /videos straight off
+      // disk, so those still answer on www. They are not pages, so it does
+      // not matter.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.gigcottage.net' }],
+        destination: 'https://gigcottage.net/:path*',
+        permanent: true,
+      },
     ];
   },
 

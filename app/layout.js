@@ -3,6 +3,8 @@ import { Montserrat, Newsreader, Source_Sans_3 } from "next/font/google";
 import localFont from "next/font/local";
 import Reveal from "./components/Reveal";
 import CookieNotice from "./components/CookieNotice";
+import Analytics from "./components/Analytics";
+import { SITE_URL } from "./lib/content";
 
 // The wordmark face, and only the wordmark. Both references set their name in a
 // high-contrast display serif — Lyon on aman.com, Morion on singita.com — and
@@ -79,7 +81,16 @@ if(!('IntersectionObserver' in window))return;
 document.documentElement.classList.add('gc-reveal-ready');
 })()`;
 
+// metadataBase turns each page's relative canonical into a full URL. Every
+// page names its own canonical: metadata merges shallowly, so one set here
+// would be inherited by every page that did not override it, and they would
+// all claim to be the home page.
+//
+// The canonical host is gigcottage.net, without www. Until 2026-10-07 the site
+// answered on both with no canonical at all, and Google picked the www copy of
+// the home page and dropped the bare one from the index.
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Gig Cottage | Event Spaces on the Adenta-Dodowa Road",
   description:
     "Four event spaces at Malejor, Accra. A garden for 2000 guests, a large naturally ventilated auditorium, an air-conditioned executive hall and a terrace. Catering, beverages and floral.",
@@ -101,6 +112,7 @@ export default function RootLayout({ children }) {
         <Reveal />
         {children}
         <CookieNotice />
+        <Analytics />
       </body>
     </html>
   );

@@ -13,6 +13,7 @@ export const metadata = {
   title: 'Facilities | Gig Cottage',
   description:
     'Four event spaces at Malejor on the Adenta-Dodowa Road: a garden for 2000 guests, a large naturally ventilated auditorium, an air-conditioned executive hall and an open terrace.',
+  alternates: { canonical: '/facilities' },
 }
 
 export default function FacilitiesPage() {

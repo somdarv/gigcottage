@@ -5,18 +5,19 @@ import { CONTACT } from '../lib/content'
 // The privacy policy.
 //
 // Written from an audit of what the site actually does, not from a template.
-// It says the site sets no cookies because it sets no cookies — there is no
-// analytics, no advertising pixel, no third-party embed, and next/font
-// self-hosts the typefaces at build time so loading a page reaches no other
-// server. If any of that changes, this page changes with it.
+// Two things reach Google: the map, which loads unless declined, and Google
+// Analytics, which loads only once accepted (lib/consent.js). There is no
+// advertising pixel, and next/font self-hosts the typefaces at build time. If
+// any of that changes, this page changes with it.
 
 export const metadata = {
   title: 'Privacy & Cookies | Gig Cottage',
   description:
-    'What Gig Cottage collects when you enquire, what we do with it, and why this site sets no cookies.',
+    'What Gig Cottage collects when you enquire, what we do with it, and which cookies the site uses.',
+  alternates: { canonical: '/privacy' },
 }
 
-const UPDATED = '27 August 2026'
+const UPDATED = '7 October 2026'
 
 export default function PrivacyPage() {
   return (
@@ -49,10 +50,15 @@ export default function PrivacyPage() {
               event is, and anything else you choose to write.
             </p>
             <p>
-              Nothing is collected automatically. There is no analytics on this
-              site, no advertising pixel, and no profiling of visitors. If you
-              read the site and never send an enquiry, we do not know you were
-              here.
+              If you accept analytics in the cookie notice, Google Analytics
+              also records how the site is used. That means which pages are
+              opened, how far down they are read, and which buttons are pressed,
+              such as Call or WhatsApp. It shows us the town and the kind of
+              device a visit came from. It does not tell us who you are.
+            </p>
+            <p>
+              Choose essential only and none of that is recorded. There is no
+              advertising pixel and no profiling of visitors.
             </p>
           </section>
 
@@ -96,15 +102,20 @@ export default function PrivacyPage() {
           <section>
             <h2>Cookies</h2>
             <p>
-              <strong>This site sets no cookies of its own.</strong> None for
-              advertising and none for analytics.
+              <strong>This site sets no advertising cookies.</strong> The
+              cookies it can carry belong to Google, for two things.
             </p>
             <p>
-              There is one third party: the map on our home page is an embedded
-              Google map, and Google sets cookies inside it. It loads with the
-              page. If you would rather it did not, choose{' '}
-              <strong>Essential only</strong> in the cookie notice and we will
-              show you a link to Google Maps instead of the map itself.
+              The map on our home page is an embedded Google map, and Google
+              sets cookies inside it. It loads with the page.
+            </p>
+            <p>
+              Google Analytics sets cookies to tell one visit from the next. It
+              runs only after you choose <strong>Accept all</strong>.
+            </p>
+            <p>
+              Choose <strong>Essential only</strong> and analytics never runs.
+              We show you a link to Google Maps instead of the map itself.
             </p>
             <p>
               The one thing stored is your answer to the cookie notice, and it is
@@ -115,13 +126,11 @@ export default function PrivacyPage() {
             </p>
             <p>
               The typefaces are served from this site rather than from Google, so
-              loading a page does not tell anyone else that you did. If we ever
-              add analytics, the notice will ask you first and nothing will run
-              until you agree.
+              loading a page does not tell anyone else that you did.
             </p>
             <p>
-              Apart from that map, nothing on these pages is fetched from anyone
-              else.
+              Apart from the map and analytics, nothing on these pages is fetched
+              from anyone else.
             </p>
           </section>
 

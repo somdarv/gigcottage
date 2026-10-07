@@ -41,6 +41,10 @@ export const CONTACT = {
   },
 }
 
+// The one address the site calls itself by: https, no www. Canonical tags, the
+// sitemap and robots.txt all build on it, and next.config.mjs sends www here.
+export const SITE_URL = `https://${CONTACT.site}`
+
 // The embedded map's URL. Never rendered into the page: an iframe pointing at
 // Google is a request to Google, with the cookies that implies, and this site
 // promises in its privacy policy not to make one uninvited. It is only ever

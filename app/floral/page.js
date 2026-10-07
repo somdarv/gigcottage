@@ -14,6 +14,7 @@ export const metadata = {
   title: 'Floral | Gig Cottage',
   description:
     'Floral arrangements at Gig Cottage, Malejor — wedding bouquets, memorial wreaths, venue decorations and corporate arrangements.',
+  alternates: { canonical: '/floral' },
 }
 
 export default function FloralPage() {

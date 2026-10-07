@@ -16,6 +16,7 @@ export const metadata = {
   title: 'Beverages | Gig Cottage',
   description:
     'Freshly squeezed juice and local drinks at Gig Cottage, Malejor — pineapple and mint, pineapple and ginger, pineapple and passion fruit, bissap and liha.',
+  alternates: { canonical: '/beverages' },
 }
 
 export default function BeveragesPage() {

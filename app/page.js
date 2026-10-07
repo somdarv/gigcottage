@@ -7,6 +7,12 @@ import FacilityCards from './components/FacilityCards'
 import FindUs from './components/FindUs'
 import SiteFooter from './components/SiteFooter'
 
+// Title and description come from the layout. Only the canonical is set here,
+// because a canonical set in the layout would be inherited by every page.
+export const metadata = {
+  alternates: { canonical: '/' },
+}
+
 // No 'use client' here any more: only the intro, the header and the hero need
 // the browser, so everything below the fold ships as plain HTML.
 export default function Page() {

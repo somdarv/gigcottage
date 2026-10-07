@@ -23,6 +23,7 @@ export function generateMetadata({ params }) {
   return {
     title: `${space.name} | Gig Cottage`,
     description: `${space.note} ${space.guests} guests at Malejor on the Adenta-Dodowa Road.`,
+    alternates: { canonical: spacePath(space) },
   }
 }
 

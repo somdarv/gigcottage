@@ -38,9 +38,11 @@ export default function CookieNotice() {
 
         {hasOptional ? (
           <p className="gc-cookie-text">
-            This site sets no cookies of its own and shows no advertising. The
-            map on the home page is loaded from Google, and Google sets cookies
-            inside it. Choose essential only and we will show a link instead.{' '}
+            This site shows no advertising. The map on the home page is loaded
+            from Google, and Google sets cookies inside it. Accept all and we
+            also count visits with Google Analytics, which sets cookies too.
+            Choose essential only and neither runs. You get a link to the map
+            instead.{' '}
             <Link href="/privacy">Read the privacy policy</Link>.
           </p>
         ) : (
